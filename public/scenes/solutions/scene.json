@@ -1,0 +1,50 @@
+{
+ "id": "solutions",
+ "camera": null,
+ "assets": [
+  {
+   "key": "asset-1",
+   "kind": "glb",
+   "url": "a1.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-2",
+   "kind": "plane",
+   "url": "a2.ktx2",
+   "width": 1984,
+   "height": 2048
+  },
+  {
+   "key": "asset-3",
+   "kind": "glb",
+   "url": "a3.glb",
+   "meshes": 7,
+   "animations": [
+    "Scene"
+   ]
+  },
+  {
+   "key": "asset-4",
+   "kind": "glb",
+   "url": "a4.glb",
+   "meshes": 8,
+   "animations": [
+    "Scene"
+   ]
+  }
+ ],
+ "posters": {
+  "desktop": {
+   "url": "poster-d.avif",
+   "width": 1920,
+   "height": 1200
+  },
+  "mobile": {
+   "url": "poster-m.avif",
+   "width": 804,
+   "height": 1748
+  }
+ }
+}

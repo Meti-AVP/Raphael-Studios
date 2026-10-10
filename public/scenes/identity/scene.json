@@ -1,0 +1,67 @@
+{
+ "id": "identity",
+ "camera": null,
+ "assets": [
+  {
+   "key": "asset-1",
+   "kind": "glb",
+   "url": "a1.glb",
+   "meshes": 6,
+   "animations": [
+    "online_canvasAction",
+    "Armature.002Action.001",
+    "online_handarmatureAction.001",
+    "online_brushAction.001"
+   ]
+  },
+  {
+   "key": "asset-2",
+   "kind": "plane",
+   "url": "a2.ktx2",
+   "width": 2048,
+   "height": 1144
+  }
+ ],
+ "posters": {
+  "desktop": {
+   "url": "poster-d.avif",
+   "width": 1920,
+   "height": 1200
+  },
+  "mobile": {
+   "url": "poster-m.avif",
+   "width": 804,
+   "height": 1748
+  }
+ },
+ "screens": [
+  {
+   "id": "editor",
+   "node": "online_computer",
+   "from": 1,
+   "to": 2.15,
+   "corners": [
+    [
+     0.83642,
+     0.51497,
+     0.36369
+    ],
+    [
+     0.17566,
+     0.49004,
+     0.37284
+    ],
+    [
+     0.84704,
+     0.0951,
+     0.26749
+    ],
+    [
+     0.18628,
+     0.07019,
+     0.27665
+    ]
+   ]
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "id": "pos",
+ "camera": "posxxlcamera",
+ "assets": [
+  {
+   "key": "asset-1",
+   "kind": "glb",
+   "url": "a1.glb",
+   "meshes": 4,
+   "animations": [
+    "Scene"
+   ]
+  },
+  {
+   "key": "asset-2",
+   "kind": "glb",
+   "url": "a2.glb",
+   "meshes": 3,
+   "animations": [
+    "Scene"
+   ]
+  },
+  {
+   "key": "asset-3",
+   "kind": "glb",
+   "url": "a3.glb",
+   "meshes": 3,
+   "animations": [
+    "Scene"
+   ]
+  }
+ ],
+ "posters": {
+  "desktop": {
+   "url": "poster-d.avif",
+   "width": 1920,
+   "height": 1200
+  },
+  "mobile": {
+   "url": "poster-m.avif",
+   "width": 804,
+   "height": 1748
+  }
+ }
+}

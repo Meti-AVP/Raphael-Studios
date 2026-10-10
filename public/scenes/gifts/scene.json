@@ -1,0 +1,37 @@
+{
+ "id": "gifts",
+ "camera": null,
+ "assets": [
+  {
+   "key": "asset-1",
+   "kind": "glb",
+   "url": "a1.glb",
+   "meshes": 6,
+   "animations": [
+    "Armature.003Action",
+    "Checkout Eyes",
+    "ArmatureAction",
+    "Credit CardAction"
+   ]
+  },
+  {
+   "key": "asset-2",
+   "kind": "plane",
+   "url": "a2.ktx2",
+   "width": 2876,
+   "height": 1840
+  }
+ ],
+ "posters": {
+  "desktop": {
+   "url": "poster-d.avif",
+   "width": 1920,
+   "height": 1200
+  },
+  "mobile": {
+   "url": "poster-m.avif",
+   "width": 804,
+   "height": 1748
+  }
+ }
+}

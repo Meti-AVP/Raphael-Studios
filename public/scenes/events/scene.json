@@ -1,0 +1,34 @@
+{
+ "id": "events",
+ "camera": null,
+ "assets": [
+  {
+   "key": "asset-1",
+   "kind": "glb",
+   "url": "a1.glb",
+   "meshes": 10,
+   "animations": [
+    "Scene"
+   ]
+  },
+  {
+   "key": "asset-2",
+   "kind": "plane",
+   "url": "a2.ktx2",
+   "width": 2048,
+   "height": 2048
+  }
+ ],
+ "posters": {
+  "desktop": {
+   "url": "poster-d.avif",
+   "width": 1920,
+   "height": 1200
+  },
+  "mobile": {
+   "url": "poster-m.avif",
+   "width": 804,
+   "height": 1748
+  }
+ }
+}

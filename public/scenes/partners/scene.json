@@ -1,0 +1,83 @@
+{
+ "id": "partners",
+ "camera": null,
+ "assets": [
+  {
+   "key": "asset-1",
+   "kind": "glb",
+   "url": "a1.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-2",
+   "kind": "glb",
+   "url": "a2.glb",
+   "meshes": 1,
+   "animations": [
+    "breathe"
+   ]
+  },
+  {
+   "key": "asset-3",
+   "kind": "glb",
+   "url": "a3.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-4",
+   "kind": "glb",
+   "url": "a4.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-5",
+   "kind": "glb",
+   "url": "a5.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-6",
+   "kind": "glb",
+   "url": "a6.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-7",
+   "kind": "glb",
+   "url": "a7.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-8",
+   "kind": "glb",
+   "url": "a8.glb",
+   "meshes": 1,
+   "animations": []
+  },
+  {
+   "key": "asset-9",
+   "kind": "glb",
+   "url": "a9.glb",
+   "meshes": 1,
+   "animations": []
+  }
+ ],
+ "posters": {
+  "desktop": {
+   "url": "poster-d.avif",
+   "width": 1920,
+   "height": 1200
+  },
+  "mobile": {
+   "url": "poster-m.avif",
+   "width": 804,
+   "height": 1748
+  }
+ }
+}
