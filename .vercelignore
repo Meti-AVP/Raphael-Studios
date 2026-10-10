@@ -1,0 +1,5 @@
+# what the host does not need to build the site (the scenes' sources, the scene and test tools' outputs)
+art/
+.verify/
+.cache/
+dist/
