@@ -1,0 +1,86 @@
+---
+// The packaging studio: a mailer box from its flat die-cut sheet, folded, printed with your brand in the finish you
+// pick, and opened (scripts/box). Until the 3D is ready, and where it cannot run, the photo of real boxes stays.
+import Media from './Media.astro';
+import { FINISHES } from '../scripts/box/print';
+const finishes = Object.entries(FINISHES).map(([id, f]) => ({ id, name: f.name, board: f.board, ink: f.ink }));
+// the sizes the studio cuts most (the 3D shows the box's shape; the brief carries the size), and what goes with it
+const sizes = ['20 × 14 × 6 cm', '24 × 17 × 7.5 cm', '32 × 22 × 10 cm', '40 × 30 × 12 cm'];
+const extras = [
+  { id: 'inside', name: 'Printed inside', on: true },
+  { id: 'tissue', name: 'Tissue paper', on: true },
+  { id: 'seal', name: 'A seal sticker', on: true },
+  { id: 'ribbon', name: 'A ribbon', on: false },
+  { id: 'insert', name: 'A fitted insert', on: false },
+];
+---
+
+<div class="studio box" data-module="box">
+  <div class="studio__stage">
+    <div class="studio__poster" aria-hidden="true">
+      <Media id="packaging-stack" sizes="(min-width: 940px) 46vw, 92vw" decorative />
+    </div>
+    <canvas
+      class="studio__canvas"
+      role="img"
+      aria-label="A mailer box in 3D, from its flat die-cut sheet to the folded box. Drag the lid to open it, drag around the box to turn it."
+      data-cursor="Turn"></canvas>
+    <p class="studio__caption label" data-box-caption aria-live="polite">The die-cut sheet</p>
+    <p class="studio__hint label" data-box-hint aria-hidden="true">Tap the sheet to fold it · drag around to turn</p>
+  </div>
+
+  <form class="studio__panel" data-box-form onsubmit="return false">
+    <fieldset class="studio__group">
+      <legend class="label">Finish</legend>
+      <div class="studio__swatches" role="radiogroup" aria-label="Finish">
+        {
+          finishes.map((f, i) => (
+            <label class="studio__swatch studio__swatch--two" style={`--c:${f.board};--c2:${f.ink}`} title={f.name}>
+              <input type="radio" name="finish" value={f.id} checked={i === 0} />
+              <span class="sr-only">{f.name}</span>
+            </label>
+          ))
+        }
+        <span class="studio__chosen" data-box-finish>{finishes[0].name}</span>
+      </div>
+    </fieldset>
+    <fieldset class="studio__group">
+      <legend class="label">Your brand</legend>
+      <div class="studio__row">
+        <input class="studio__text" type="text" name="text" maxlength="28" placeholder="Your brand" value="Raphael Studios" autocomplete="organization" />
+        <label class="studio__upload pill">
+          Logo
+          <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+        </label>
+      </div>
+    </fieldset>
+    <fieldset class="studio__group">
+      <legend class="label">Size</legend>
+      <select class="studio__select" name="size" aria-label="The box's size">
+        {sizes.map((z, i) => <option value={z} selected={i === 1}>{z}</option>)}
+      </select>
+    </fieldset>
+    <fieldset class="studio__group">
+      <legend class="label">How many boxes</legend>
+      <input class="studio__num" type="number" name="boxes" min="50" max="1000000" step="50" value="500" inputmode="numeric" aria-label="How many boxes" />
+    </fieldset>
+    <fieldset class="studio__group studio__wide">
+      <legend class="label">With it</legend>
+      <div class="studio__chips">
+        {
+          extras.map((x) => (
+            <label>
+              <input type="checkbox" name="extra" value={x.id} checked={x.on} />
+              <span>{x.name}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+    <div class="studio__actions">
+      <button class="studio__main" type="button" data-box-fold>Fold it</button>
+      <button class="studio__second" type="button" data-box-lid disabled>Open the lid</button>
+      <a class="pill" href="#" target="_blank" rel="noopener" data-box-order>Ask for this box ↗</a>
+    </div>
+  </form>
+</div>

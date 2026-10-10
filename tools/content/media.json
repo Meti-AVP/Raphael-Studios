@@ -1,0 +1,699 @@
+{
+  "$comment": "Every image the site shows: where it comes from and how it is prepared. Sources: pdf = 'raphael Studios Story 2026 final.pdf' (page, image xref), psd = Links/<name>.psd (the 2022 layout's linked images, used where they are the same picture at a higher resolution), art = public-domain paintings (see docs/CREDITS.md). 'up' = upscale factor (Real-ESRGAN), 'cut' = cut the subject out (BiRefNet) for the 3D hover, 'depthUnion' = also lift what the depth map says is near (out-of-focus hands etc.), 'depth' = save a depth map, 'max' = longest side of the master.",
+  "items": [
+    {
+      "id": "cover-cairo",
+      "src": "pdf:1:323",
+      "up": 2,
+      "chapter": "contact",
+      "alt": "A painter's golden brushstroke reveals Cairo: the Cairo Tower, the pyramids and the Nile at sunset"
+    },
+    {
+      "id": "reach",
+      "src": "pdf:2:357",
+      "up": 3,
+      "cut": true,
+      "depthUnion": 0.62,
+      "chapter": "intro",
+      "alt": "A woman in a cream knit sweater reaches towards the camera under a blue sky"
+    },
+    {
+      "id": "glass-r",
+      "src": "pdf:4:9",
+      "up": 3,
+      "chapter": "services",
+      "alt": "A clear glass letter R filled with red cherries"
+    },
+    {
+      "id": "founder",
+      "src": "pdf:5:3",
+      "up": 2,
+      "cut": true,
+      "chapter": "approach",
+      "alt": "Rafik Roushdy, co-founder of Raphael Studios, seated, in a dark suit and tinted glasses"
+    },
+    {
+      "id": "egypt-flowers",
+      "src": "pdf:23:27",
+      "up": 3,
+      "chapter": "contact",
+      "alt": "The map of Egypt made of flowers, cacti and palm leaves"
+    },
+    {
+      "id": "iqos-neon",
+      "src": "pdf:6:15",
+      "up": 4,
+      "chapter": "solutions",
+      "alt": "A glowing IQOS neon sign on a dark stage"
+    },
+    {
+      "id": "iqos-wall",
+      "src": "pdf:6:22",
+      "up": 4,
+      "chapter": "solutions",
+      "alt": "An illuminated IQOS logo wall at an event"
+    },
+    {
+      "id": "caf-ball",
+      "src": "psd:AI_Image12",
+      "up": 1,
+      "max": 1800,
+      "chapter": "solutions",
+      "alt": "A golden CAF football in a stadium, for the TotalEnergies 'Let's live football together' campaign"
+    },
+    {
+      "id": "football-bags",
+      "src": "psd:AI_Image10",
+      "up": 1,
+      "max": 2400,
+      "chapter": "solutions",
+      "alt": "Custom sports bags for the TotalEnergies football campaign"
+    },
+    {
+      "id": "oxi-display",
+      "src": "pdf:6:17",
+      "up": 3,
+      "chapter": "solutions",
+      "alt": "An Oxi product display unit and the social media stories made with it"
+    },
+    {
+      "id": "robot-suit",
+      "src": "pdf:6:21",
+      "up": 3,
+      "chapter": "solutions",
+      "alt": "TotalEnergies robot suit proposal: the suit, the 3D-modelled mask and the 3D-printing fitting tests"
+    },
+    {
+      "id": "promo-collage",
+      "src": "pdf:7:33",
+      "up": 3,
+      "chapter": "gifts",
+      "alt": "Promotional gifts for TotalEnergies, Rubia and Quartz: bags, kits and branded merchandise"
+    },
+    {
+      "id": "bonjour-totes",
+      "src": "pdf:7:34",
+      "up": 3,
+      "chapter": "gifts",
+      "alt": "Bonjour by TotalEnergies 'Discover your energy' tote bags with aura-colour artwork"
+    },
+    {
+      "id": "aura-colors",
+      "src": "psd:AI_Image20",
+      "up": 1,
+      "chapter": "gifts",
+      "alt": "Aura colours: a round, vividly illustrated artwork created for a TotalEnergies tote bag"
+    },
+    {
+      "id": "heineken-cooler",
+      "src": "pdf:7:35",
+      "up": 4,
+      "chapter": "gifts",
+      "alt": "Heineken beach promotion poster with a green cooler bag and towel"
+    },
+    {
+      "id": "sol-cooler",
+      "src": "pdf:7:36",
+      "up": 4,
+      "chapter": "gifts",
+      "alt": "Sol promotion poster: buy 6 and get a cooler bag"
+    },
+    {
+      "id": "drinkies-tote",
+      "src": "pdf:7:37",
+      "up": 4,
+      "chapter": "gifts",
+      "alt": "Drinkies promotion poster with a cooler tote bag"
+    },
+    {
+      "id": "packaging-stack",
+      "src": "pdf:8:43",
+      "up": 3,
+      "chapter": "packaging",
+      "alt": "A stack of Rivoli and Oxi gift boxes beside a Raphael Studios shopping bag"
+    },
+    {
+      "id": "raphael-bag",
+      "src": "pdf:8:45",
+      "up": 4,
+      "chapter": "packaging",
+      "alt": "A Raphael Studios shopping bag that opens onto a tailor's shop"
+    },
+    {
+      "id": "packaging-mass",
+      "src": "pdf:8:46",
+      "up": 3,
+      "chapter": "packaging",
+      "alt": "Packaging in mass production: Oxi and Rivoli boxes in trucks and stacked in the warehouse"
+    },
+    {
+      "id": "trevi-box",
+      "src": "pdf:8:48",
+      "up": 4,
+      "chapter": "packaging",
+      "alt": "A Castello di Trevi gift box with roses and a candle"
+    },
+    {
+      "id": "orange-girl",
+      "src": "pdf:9:163",
+      "up": 4,
+      "cut": true,
+      "chapter": "uniform",
+      "alt": "Orange semi-formal uniform: a smiling woman in an orange sweatshirt"
+    },
+    {
+      "id": "orange-guy",
+      "src": "psd:AI_Image23",
+      "up": 2,
+      "cut": true,
+      "chapter": "uniform",
+      "alt": "Orange semi-formal uniform: a man in an orange sweatshirt makes an OK sign"
+    },
+    {
+      "id": "heineken-duo",
+      "src": "pdf:9:169",
+      "up": 4,
+      "cut": true,
+      "chapter": "uniform",
+      "alt": "Heineken uniform: two models in cream polo shirts with green collars and green shorts"
+    },
+    {
+      "id": "heineken-2025",
+      "src": "pdf:9:171",
+      "up": 4,
+      "chapter": "uniform",
+      "alt": "Heineken Uniform 2025: shirts with the Heineken logo down the front"
+    },
+    {
+      "id": "oxi-blazer",
+      "src": "psd:AI_Image21",
+      "up": 1,
+      "cut": true,
+      "chapter": "uniform",
+      "alt": "Oxi brand uniform: a woman in a pink blazer and striped shirt"
+    },
+    {
+      "id": "crystal-uniform",
+      "src": "psd:AI_Image24",
+      "up": 2,
+      "chapter": "uniform",
+      "alt": "Crystal vinegar uniform concept: a blue suit and a red blouse"
+    },
+    {
+      "id": "rivoli-team",
+      "src": "pdf:10:56",
+      "up": 4,
+      "chapter": "uniform",
+      "alt": "Rivoli brand ambassadors in purple dresses"
+    },
+    {
+      "id": "rivoli-activation",
+      "src": "pdf:10:58",
+      "up": 4,
+      "chapter": "uniform",
+      "alt": "A Rivoli activation booth with promoters in purple tops"
+    },
+    {
+      "id": "total-team",
+      "src": "pdf:10:60",
+      "up": 4,
+      "chapter": "uniform",
+      "alt": "A TotalEnergies team in white uniforms at a branded stage"
+    },
+    {
+      "id": "promoters",
+      "src": "pdf:10:62",
+      "up": 4,
+      "chapter": "uniform",
+      "alt": "In-store promoters in red and white uniforms in a supermarket"
+    },
+    {
+      "id": "total-polos",
+      "src": "psd:AI_Imagje",
+      "up": 2,
+      "chapter": "uniform",
+      "alt": "TotalEnergies blue polo shirts with athletic artwork"
+    },
+    {
+      "id": "sol-tee",
+      "src": "pdf:10:66",
+      "up": 4,
+      "cut": true,
+      "chapter": "uniform",
+      "alt": "Sol beach staff in white Sol t-shirts and red shorts"
+    },
+    {
+      "id": "mpg-barista",
+      "src": "pdf:10:68",
+      "up": 4,
+      "cut": true,
+      "chapter": "uniform",
+      "alt": "An MPG barista in a black branded polo and cap pours coffee"
+    },
+    {
+      "id": "neck-labels",
+      "src": "pdf:11:208",
+      "up": 3,
+      "chapter": "production",
+      "alt": "Folded t-shirts in four colours with woven Raphael Studios neck labels"
+    },
+    {
+      "id": "embroidery-caps",
+      "src": "pdf:11:209",
+      "up": 3,
+      "chapter": "production",
+      "alt": "A row of embroidery machines stitching red caps"
+    },
+    {
+      "id": "embroidery-laurel",
+      "src": "pdf:11:210",
+      "up": 4,
+      "chapter": "production",
+      "alt": "An embroidery machine stitching a turquoise laurel wreath logo"
+    },
+    {
+      "id": "wellwoman",
+      "src": "pdf:12:146",
+      "up": 3,
+      "chapter": "giveaways",
+      "alt": "Wellwoman awards ceremony and the gold trophies made for it"
+    },
+    {
+      "id": "ucl-ball",
+      "src": "pdf:12:147",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A branded Champions League football"
+    },
+    {
+      "id": "trevi-blanket",
+      "src": "pdf:12:148",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A Castello di Trevi fleece blanket with a leather strap"
+    },
+    {
+      "id": "star-waistbag",
+      "src": "pdf:12:149",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A yellow waist bag with a blue star"
+    },
+    {
+      "id": "iqos-totes",
+      "src": "pdf:12:153",
+      "up": 3,
+      "chapter": "giveaways",
+      "alt": "IQOS tote bag and bottle giveaway, styled on a sun lounger"
+    },
+    {
+      "id": "iqos-pouch",
+      "src": "pdf:12:151",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "IQOS illustrated tote bag and pouch"
+    },
+    {
+      "id": "iqos-market",
+      "src": "pdf:12:155",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "IQOS printed shopping bag at a fruit market"
+    },
+    {
+      "id": "iqos-bag",
+      "src": "pdf:12:157",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A canvas IQOS bag with turquoise handles"
+    },
+    {
+      "id": "backgammon",
+      "src": "pdf:13:182",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A branded beach backgammon set by the sea"
+    },
+    {
+      "id": "duffle-star",
+      "src": "pdf:13:183",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A navy and yellow duffle bag with a white star"
+    },
+    {
+      "id": "clear-bag",
+      "src": "pdf:13:184",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A clear Castello di Trevi bag with a wooden handle and a pink pouch"
+    },
+    {
+      "id": "sol-hat",
+      "src": "pdf:13:185",
+      "up": 4,
+      "cut": true,
+      "chapter": "giveaways",
+      "alt": "A woman wearing a yellow Sol bucket hat"
+    },
+    {
+      "id": "sunny-cooler",
+      "src": "pdf:13:186",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A 'Welcome to the sunny side' cooler bag"
+    },
+    {
+      "id": "heineken-bag",
+      "src": "pdf:13:187",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A green Heineken sports bag"
+    },
+    {
+      "id": "iqos-crossbody",
+      "src": "pdf:13:189",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "A navy IQOS crossbody bag"
+    },
+    {
+      "id": "iqos-towels",
+      "src": "pdf:13:191",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "IQOS beach towels in orange and purple"
+    },
+    {
+      "id": "iqos-ornament",
+      "src": "pdf:13:193",
+      "up": 4,
+      "chapter": "giveaways",
+      "alt": "An IQOS car ornament: 'Do more of what makes you happy'"
+    },
+    {
+      "id": "iqos-duffle",
+      "src": "pdf:13:195",
+      "up": 3,
+      "chapter": "giveaways",
+      "alt": "An IQOS patterned duffle bag at a picnic"
+    },
+    {
+      "id": "oxi-donia",
+      "src": "pdf:14:216",
+      "up": 3,
+      "chapter": "pos",
+      "alt": "Oxi point-of-sale visual with actress Donia Samir Ghanem"
+    },
+    {
+      "id": "dosh-pos",
+      "src": "pdf:14:218",
+      "up": 3,
+      "chapter": "pos",
+      "alt": "Dosh point-of-sale: shelf displays, a branded truck and a floor stand"
+    },
+    {
+      "id": "rivoli-packs",
+      "src": "pdf:14:220",
+      "up": 3,
+      "chapter": "pos",
+      "alt": "Rivoli soap packs and shelf visuals"
+    },
+    {
+      "id": "identity-proposals",
+      "src": "pdf:15:238",
+      "up": 2,
+      "chapter": "identity",
+      "alt": "Business proposals and identity pages for Gran Tira and Kharafi National"
+    },
+    {
+      "id": "doctor-clean",
+      "src": "pdf:16:244",
+      "up": 2,
+      "chapter": "identity",
+      "alt": "Doctor Clean identity across packaging, outdoor, a van and campaign visuals"
+    },
+    {
+      "id": "total-caf",
+      "src": "pdf:17:250",
+      "up": 3,
+      "chapter": "communication",
+      "alt": "TotalEnergies African Cup of Nations t-shirt concept presentation"
+    },
+    {
+      "id": "total-social",
+      "src": "pdf:17:252",
+      "up": 3,
+      "chapter": "communication",
+      "alt": "TotalEnergies 'Discover your inner energy' social media campaign"
+    },
+    {
+      "id": "viz-cafes",
+      "src": "pdf:18:260",
+      "up": 3,
+      "chapter": "visualization",
+      "alt": "3D visualisation of two cafés with IQOS artwork"
+    },
+    {
+      "id": "viz-night-wall",
+      "src": "pdf:18:262",
+      "up": 4,
+      "chapter": "visualization",
+      "alt": "3D visualisation: an IQOS mosaic wall sign on a café terrace at night",
+      "lines": true
+    },
+    {
+      "id": "viz-plant-stand",
+      "src": "pdf:18:264",
+      "up": 3,
+      "chapter": "visualization",
+      "alt": "3D visualisation of an IQOS green-wall stand, outdoors and in a café",
+      "lines": true
+    },
+    {
+      "id": "viz-totems",
+      "src": "pdf:18:266",
+      "up": 3,
+      "chapter": "visualization",
+      "alt": "3D visualisation of illuminated IQOS totems at night and by day",
+      "lines": true
+    },
+    {
+      "id": "viz-wood-sign",
+      "src": "pdf:18:268",
+      "up": 4,
+      "chapter": "visualization",
+      "alt": "3D visualisation of a backlit IQOS sign on a wooden wall"
+    },
+    {
+      "id": "viz-clocks",
+      "src": "pdf:18:258",
+      "up": 4,
+      "chapter": "visualization",
+      "alt": "3D visualisation of IQOS wall clocks"
+    },
+    {
+      "id": "remix-dj",
+      "src": "pdf:19:273",
+      "up": 3,
+      "chapter": "outdoor",
+      "alt": "North Coast Summer Remix: the IQOS ILUMA Remix DJ booth"
+    },
+    {
+      "id": "remix-stage",
+      "src": "pdf:19:274",
+      "up": 3,
+      "chapter": "outdoor",
+      "alt": "North Coast Summer Remix: the DJ booth at sunset"
+    },
+    {
+      "id": "remix-entrance",
+      "src": "pdf:19:275",
+      "up": 3,
+      "chapter": "outdoor",
+      "alt": "North Coast Summer Remix: the beach festival entrance arch"
+    },
+    {
+      "id": "remix-vending",
+      "src": "pdf:19:276",
+      "up": 3,
+      "chapter": "outdoor",
+      "alt": "North Coast Summer Remix: vending machine skins"
+    },
+    {
+      "id": "remix-booth",
+      "src": "pdf:19:277",
+      "up": 3,
+      "chapter": "outdoor",
+      "alt": "North Coast Summer Remix: a futuristic mirror photo booth"
+    },
+    {
+      "id": "remix-entertainment",
+      "src": "pdf:19:278",
+      "up": 3,
+      "chapter": "outdoor",
+      "alt": "North Coast Summer Remix: futuristic event entertainment and cocktail trays"
+    },
+    {
+      "id": "superheroes",
+      "src": "pdf:20:292",
+      "up": 3,
+      "chapter": "events",
+      "alt": "Concentrix Superheroes: four faces painted as superheroes"
+    },
+    {
+      "id": "back-to-90s",
+      "src": "pdf:20:307",
+      "up": 3,
+      "chapter": "events",
+      "alt": "Concentrix 'Back to the 90's' event poster"
+    },
+    {
+      "id": "ev-facepaint-1",
+      "src": "pdf:20:293",
+      "up": 3,
+      "chapter": "events",
+      "alt": "Face painting at the Concentrix Superheroes event"
+    },
+    {
+      "id": "ev-facepaint-2",
+      "src": "pdf:20:310",
+      "up": 3,
+      "chapter": "events",
+      "alt": "A guest with superhero face paint"
+    },
+    {
+      "id": "ev-facepaint-3",
+      "src": "pdf:20:311",
+      "up": 3,
+      "chapter": "events",
+      "alt": "A guest smiling with face paint at Concentrix"
+    },
+    {
+      "id": "ev-photo-card",
+      "src": "pdf:20:304",
+      "up": 3,
+      "chapter": "events",
+      "alt": "A Concentrix Superheroes printed photo card"
+    },
+    {
+      "id": "ev-90s-1",
+      "src": "pdf:20:309",
+      "up": 4,
+      "chapter": "events",
+      "alt": "Guests in 90's outfits at the Concentrix party"
+    },
+    {
+      "id": "ev-90s-2",
+      "src": "pdf:20:294",
+      "up": 4,
+      "chapter": "events",
+      "alt": "A guest in a 90's windbreaker"
+    },
+    {
+      "id": "ev-cart",
+      "src": "pdf:20:306",
+      "up": 4,
+      "chapter": "events",
+      "alt": "A branded candy-floss cart"
+    },
+    {
+      "id": "ev-gift-box",
+      "src": "pdf:20:301",
+      "up": 4,
+      "chapter": "events",
+      "alt": "A Concentrix gift box with a notebook, pen and keychain"
+    },
+    {
+      "id": "ev-boxes",
+      "src": "pdf:20:303",
+      "up": 4,
+      "chapter": "events",
+      "alt": "Stacked Concentrix gift boxes"
+    },
+    {
+      "id": "ev-team",
+      "src": "pdf:20:299",
+      "up": 4,
+      "chapter": "events",
+      "alt": "The Concentrix team with their 90's party gifts"
+    },
+    {
+      "id": "total-night",
+      "src": "psd:AI_Image27",
+      "up": 1,
+      "max": 2600,
+      "cut": true,
+      "chapter": "photography",
+      "alt": "Two women in reflective racing suits under a TotalEnergies station canopy at night"
+    },
+    {
+      "id": "marie-louis-1",
+      "src": "psd:AI_Image",
+      "up": 2,
+      "cut": true,
+      "chapter": "photography",
+      "alt": "Marie Louis fall/winter collection: a model in a black lace dress between white columns"
+    },
+    {
+      "id": "marie-louis-2",
+      "src": "psd:AI_Image4",
+      "up": 2,
+      "chapter": "photography",
+      "alt": "Marie Louis summer collection on a jetty by the Nile, the Cairo Tower behind"
+    },
+    {
+      "id": "marie-louis-3",
+      "src": "psd:AI_Image3",
+      "up": 2,
+      "chapter": "photography",
+      "alt": "Marie Louis fall/winter collection: a model in a blue coat"
+    },
+    {
+      "id": "riding-jacket",
+      "src": "psd:AI_Image5",
+      "up": 2,
+      "cut": true,
+      "chapter": "photography",
+      "alt": "A model in an equestrian helmet and a fitted grey riding jacket"
+    },
+    {
+      "id": "winter-street",
+      "src": "psd:AI_Image6",
+      "up": 3,
+      "chapter": "photography",
+      "alt": "Winter 2013: a model in a white sweater on a downtown Cairo street"
+    },
+    {
+      "id": "acapella",
+      "src": "psd:AI_Image7",
+      "up": 2,
+      "cut": true,
+      "chapter": "photography",
+      "alt": "Acapella collection: a man in a printed t-shirt leans on a wall"
+    },
+    {
+      "id": "gem",
+      "src": "pdf:22:202",
+      "up": 2,
+      "chapter": "partners",
+      "alt": "The Grand Egyptian Museum consortium campaign: a traveller at the pyramids and the museum"
+    },
+    {
+      "id": "womens-day",
+      "src": "pdf:22:201",
+      "up": 3,
+      "chapter": "partners",
+      "alt": "TotalEnergies International Women's Day poster: a classical bust in a rainbow of rings"
+    },
+    {
+      "id": "school-of-athens",
+      "src": "art:school-of-athens.jpg",
+      "up": 1,
+      "max": 2600,
+      "depth": true,
+      "chapter": "approach",
+      "alt": "The School of Athens, fresco by Raphael (1509–1511)"
+    }
+  ]
+}

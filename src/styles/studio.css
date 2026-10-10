@@ -1,0 +1,364 @@
+/* The interactive studios on the paper (the box, the visualizer, the giveaways, the photo booth): one stage with
+   its 3D or canvas, and a panel of controls under it. The atelier's shirt has the same look in its own styles. */
+
+.studio {
+  display: grid;
+  gap: 16px;
+}
+.studio__stage {
+  position: relative;
+  aspect-ratio: 4 / 3.6;
+  border-radius: var(--radius);
+  overflow: clip;
+  background: radial-gradient(ellipse at 50% 40%, #f6f3ec 0%, #e8e3d6 62%, #dcd7c9 100%);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.studio__poster {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.8s var(--ease-out);
+}
+.studio__poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.studio.is-ready .studio__poster {
+  opacity: 0;
+  pointer-events: none;
+}
+.studio__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+  cursor: grab;
+}
+.studio__canvas:active {
+  cursor: grabbing;
+}
+.studio__hint,
+.studio__caption {
+  position: absolute;
+  left: 14px;
+  color: var(--ink-2);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.studio__hint {
+  bottom: 12px;
+}
+.studio__caption {
+  top: 12px;
+}
+.studio.is-ready .studio__hint,
+.studio.is-ready .studio__caption {
+  opacity: 1;
+}
+.studio__panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+.studio__group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.studio__group legend {
+  margin-bottom: 7px;
+  color: var(--ink-2);
+}
+.studio__wide {
+  grid-column: 1 / -1;
+}
+.studio__swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.studio__swatch {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-out);
+}
+/* a finish: the board with its ink as a dot */
+.studio__swatch--two::after {
+  content: '';
+  position: absolute;
+  inset: 31%;
+  border-radius: 50%;
+  background: var(--c2);
+}
+.studio__swatch input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.studio__swatch:has(input:checked) {
+  transform: scale(1.12);
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.18),
+    0 0 0 2px var(--paper),
+    0 0 0 3.5px var(--ink);
+}
+.studio__swatch:has(input:focus-visible) {
+  outline: 2px solid var(--turq-deep);
+  outline-offset: 3px;
+}
+.studio__chosen {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ink-2);
+  margin-left: 4px;
+}
+.studio__row {
+  display: flex;
+  gap: 8px;
+}
+.studio__text {
+  flex: 1;
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: rgb(255 255 255 / 0.6);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+.studio__text:focus-visible {
+  outline: 2px solid var(--turq-deep);
+}
+.studio__upload {
+  position: relative;
+  height: 34px;
+  cursor: pointer;
+}
+.studio__upload input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.studio__seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  padding: 2px;
+  gap: 2px;
+}
+.studio__seg label {
+  position: relative;
+  cursor: pointer;
+}
+.studio__seg input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.studio__seg span {
+  display: block;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-2);
+  transition:
+    background-color 0.25s,
+    color 0.25s;
+}
+.studio__seg input:checked + span {
+  background: var(--ink);
+  color: var(--light);
+}
+.studio__seg input:focus-visible + span {
+  outline: 2px solid var(--turq-deep);
+}
+.studio__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+.studio__main {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--turq-deep);
+  color: var(--light);
+  font-weight: 700;
+  transition: background-color 0.25s;
+}
+.studio__main:hover {
+  background: var(--ink);
+}
+.studio__second {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  color: var(--ink);
+  font-weight: 700;
+  transition:
+    background-color 0.25s,
+    color 0.25s;
+}
+.studio__second:hover {
+  background: var(--ink);
+  color: var(--light);
+}
+/* the request: the studio's last word, as a button of its own */
+.studio__actions a.pill {
+  justify-content: center;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--light);
+  font-size: 0.88rem;
+  box-shadow: none;
+}
+.studio__actions a.pill:hover,
+.studio__actions a.pill:focus-visible {
+  background: var(--turq-deep);
+}
+.studio__second[disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+/* any colour: a wheel of them, which opens the colour picker (and shows the colour once picked) */
+.studio__swatch--any {
+  background: conic-gradient(from 0deg, #e5484d, #f5a524, #f4e04d, #46a758, #3ee0d1, #3e63dd, #8e4ec6, #e5484d);
+}
+.studio__swatch--any.is-picked {
+  background:
+    radial-gradient(circle, var(--c) 52%, transparent 54%),
+    conic-gradient(from 0deg, #e5484d, #f5a524, #f4e04d, #46a758, #3ee0d1, #3e63dd, #8e4ec6, #e5484d);
+}
+.studio__swatch .studio__picker {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+}
+.studio__logo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--ink-2);
+}
+.studio__logo[hidden] {
+  display: none;
+}
+.studio__logo button {
+  font-weight: 700;
+  color: var(--turq-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.studio__check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+}
+.studio__check input {
+  accent-color: var(--turq-deep);
+}
+.studio__num {
+  width: 100%;
+  max-width: 160px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: rgb(255 255 255 / 0.6);
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.studio__num:focus-visible,
+.studio__select:focus-visible {
+  outline: 2px solid var(--turq-deep);
+}
+.studio__select {
+  width: 100%;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: 6px;
+  border: 1px solid var(--line-strong);
+  background: rgb(255 255 255 / 0.6);
+  font: inherit;
+  font-size: 0.86rem;
+  color: var(--ink);
+}
+/* things to keep or leave out: chips that fill when kept */
+.studio__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.studio__chips label {
+  position: relative;
+  cursor: pointer;
+}
+.studio__chips input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.studio__chips span {
+  display: block;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-2);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  transition:
+    background-color 0.25s,
+    color 0.25s,
+    box-shadow 0.25s;
+}
+.studio__chips input:checked + span {
+  background: var(--ink);
+  color: var(--light);
+  box-shadow: none;
+}
+.studio__chips input:focus-visible + span {
+  outline: 2px solid var(--turq-deep);
+  outline-offset: 2px;
+}
+@media (max-width: 520px) {
+  .studio__panel {
+    grid-template-columns: 1fr;
+  }
+}

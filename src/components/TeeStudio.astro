@@ -1,0 +1,822 @@
+---
+// The atelier: a real shirt to make for your team. The canvas shows the cloth (scripts/tee); the inspector beside it
+// goes in three steps: the garment (a T-shirt, a polo, a sweatshirt; its fabric and colour), the design (a mark on
+// each of four places, each its own words or logo, font, technique, colour, size and height), and the order (how many
+// of each size, the spec written out, sent to the studio, or saved as a spec sheet).
+import Media from './Media.astro';
+const fabrics = [
+  { name: 'Natural white', hex: '#f4f1ea' },
+  { name: 'Black', hex: '#1f1f1d' },
+  { name: 'Raphael turquoise', hex: '#19b5a8' },
+  { name: 'Navy', hex: '#1f2a44' },
+  { name: 'Heather grey', hex: '#b9b6ae' },
+  { name: 'Sand', hex: '#d6c7a4' },
+  { name: 'Brick', hex: '#9e3328' },
+];
+const inks = [
+  { name: 'Deep turquoise', hex: '#0c6e66' },
+  { name: 'Turquoise', hex: '#3ee0d1' },
+  { name: 'Ink', hex: '#28281c' },
+  { name: 'Cream', hex: '#f7f5ee' },
+  { name: 'Gold', hex: '#c9a14a' },
+  { name: 'Red', hex: '#c2362e' },
+];
+const cloths = [
+  { value: 'jersey-180', name: 'Cotton jersey · 180 gsm' },
+  { value: 'jersey-220', name: 'Heavy cotton jersey · 220 gsm' },
+  { value: 'pique-220', name: 'Cotton piqué · 220 gsm' },
+  { value: 'fleece-300', name: 'Brushed fleece · 300 gsm' },
+];
+const places = [
+  { value: 'chest', name: 'Left chest' },
+  { value: 'center', name: 'Front' },
+  { value: 'back', name: 'Back' },
+  { value: 'sleeve', name: 'Sleeve' },
+];
+const sizes = [
+  { s: 'S', n: 8 },
+  { s: 'M', n: 16 },
+  { s: 'L', n: 16 },
+  { s: 'XL', n: 7 },
+  { s: 'XXL', n: 3 },
+];
+---
+
+<div class="tee" data-module="tee" data-tee>
+  <div class="tee__stage">
+    <div class="tee__poster" aria-hidden="true">
+      <Media id="neck-labels" sizes="(min-width: 940px) 46vw, 92vw" decorative />
+    </div>
+    <canvas class="tee__canvas" aria-label="Your shirt in 3D. Drag to turn it; in Pull mode, drag the fabric to pull it." role="img" data-cursor="Turn"></canvas>
+    <p class="tee__hint label" aria-hidden="true" data-tee-hint>Drag to turn it</p>
+    <div class="tee__tools" role="toolbar" aria-label="The shirt">
+      <div class="tee__mode" role="radiogroup" aria-label="What a drag does">
+        <button type="button" role="radio" aria-checked="true" data-tee-mode="turn">Turn</button>
+        <button type="button" role="radio" aria-checked="false" data-tee-mode="pull">Pull</button>
+      </div>
+      <div class="tee__views">
+        <button type="button" data-tee-view="0">Front</button>
+        <button type="button" data-tee-view="-1.5708">Side</button>
+        <button type="button" data-tee-view="3.14159">Back</button>
+      </div>
+    </div>
+    <button class="tee__blow" type="button" data-tee-blow aria-label="Blow air on the shirt">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h11a3 3 0 1 0-3-3M3 15h15a3 3 0 1 1-3 3M3 12h8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path></svg>
+    </button>
+  </div>
+
+  <form class="tee__panel" data-tee-form onsubmit="return false">
+    <div class="tee__steps" role="tablist" aria-label="Make your shirt">
+      <button type="button" role="tab" id="tee-tab-1" aria-controls="tee-step-1" aria-selected="true" data-tee-step="1"><b>1</b>Garment</button>
+      <button type="button" role="tab" id="tee-tab-2" aria-controls="tee-step-2" aria-selected="false" tabindex="-1" data-tee-step="2"><b>2</b>Design</button>
+      <button type="button" role="tab" id="tee-tab-3" aria-controls="tee-step-3" aria-selected="false" tabindex="-1" data-tee-step="3"><b>3</b>Order</button>
+    </div>
+
+    <section class="tee__pane" id="tee-step-1" role="tabpanel" aria-labelledby="tee-tab-1" data-tee-pane="1">
+      <fieldset class="tee__group">
+        <legend class="label">Garment</legend>
+        <div class="tee__seg tee__seg--fill">
+          <label><input type="radio" name="garment" value="tee" checked /><span>T-shirt</span></label>
+          <label><input type="radio" name="garment" value="polo" /><span>Polo</span></label>
+          <label><input type="radio" name="garment" value="sweat" /><span>Sweatshirt</span></label>
+        </div>
+      </fieldset>
+      <fieldset class="tee__group">
+        <legend class="label">Fabric</legend>
+        <select class="tee__select" name="cloth" aria-label="Fabric">
+          {cloths.map((c, i) => <option value={c.value} selected={i === 1}>{c.name}</option>)}
+        </select>
+      </fieldset>
+      <fieldset class="tee__group">
+        <legend class="label">Colour · <span class="tee__named" data-tee-named="fabric">{fabrics[0].name}</span></legend>
+        <div class="tee__swatches" role="radiogroup" aria-label="Fabric colour">
+          {
+            fabrics.map((f, i) => (
+              <label class="tee__swatch" style={`--c:${f.hex}`} title={f.name}>
+                <input type="radio" name="fabric" value={f.hex} checked={i === 0} />
+                <span class="sr-only">{f.name}</span>
+              </label>
+            ))
+          }
+          <label class="tee__swatch tee__swatch--any" title="Any colour: your brand's own">
+            <input type="radio" name="fabric" value="any" />
+            <input class="tee__picker" type="color" name="fabricAny" value="#4a6b8a" aria-label="Any fabric colour" />
+            <span class="sr-only">Any colour</span>
+          </label>
+        </div>
+      </fieldset>
+      <button class="tee__next" type="button" data-tee-goto="2">Next: the design</button>
+    </section>
+
+    <section class="tee__pane" id="tee-step-2" role="tabpanel" aria-labelledby="tee-tab-2" data-tee-pane="2" hidden>
+      <div class="tee__places" role="radiogroup" aria-label="The place you are designing">
+        {
+          places.map((p, i) => (
+            <label>
+              <input type="radio" name="place" value={p.value} checked={i === 0} />
+              <span>
+                {p.name}
+                <i data-tee-dot={p.value} class={i === 0 ? 'is-on' : ''} />
+              </span>
+            </label>
+          ))
+        }
+      </div>
+      <label class="tee__switch"><input type="checkbox" name="on" checked /><span>A mark on this place</span></label>
+      <div class="tee__mark" data-tee-mark>
+        <div class="tee__row">
+          <input class="tee__text" type="text" name="text" maxlength="28" placeholder="Your brand" value="Raphael Studios" autocomplete="organization" aria-label="The words" />
+          <label class="tee__upload pill">
+            Logo
+            <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+          </label>
+        </div>
+        <p class="tee__logo" data-tee-logo hidden>
+          <span data-tee-logo-name>Your logo</span>
+          <button type="button" data-tee-logo-clear>Use the words</button>
+        </p>
+        <div class="tee__seg tee__seg--fill" role="radiogroup" aria-label="Font" data-tee-fonts>
+          <label><input type="radio" name="font" value="classic" checked /><span class="tee__f-classic">Classic</span></label>
+          <label><input type="radio" name="font" value="bold" /><span class="tee__f-bold">Bold</span></label>
+          <label><input type="radio" name="font" value="script" /><span class="tee__f-script">Script</span></label>
+        </div>
+        <div class="tee__seg tee__seg--fill" role="radiogroup" aria-label="Technique">
+          <label><input type="radio" name="technique" value="embroidery" checked /><span>Embroidery</span></label>
+          <label><input type="radio" name="technique" value="print" /><span>Screen print</span></label>
+        </div>
+        <fieldset class="tee__group">
+          <legend class="label"><span data-tee-inklabel>Thread</span> · <span class="tee__named" data-tee-named="ink">{inks[0].name}</span></legend>
+          <div class="tee__swatches tee__swatches--sm" role="radiogroup" aria-label="Thread or ink colour">
+            {
+              inks.map((f, i) => (
+                <label class="tee__swatch" style={`--c:${f.hex}`} title={f.name}>
+                  <input type="radio" name="ink" value={f.hex} checked={i === 0} />
+                  <span class="sr-only">{f.name}</span>
+                </label>
+              ))
+            }
+            <label class="tee__swatch tee__swatch--orig" title="The logo's own colours" data-tee-orig hidden>
+              <input type="radio" name="ink" value="original" />
+              <span class="sr-only">The logo's own colours</span>
+            </label>
+            <label class="tee__swatch tee__swatch--any" title="Any colour">
+              <input type="radio" name="ink" value="any" />
+              <input class="tee__picker" type="color" name="inkAny" value="#7a4fd8" aria-label="Any thread or ink colour" />
+              <span class="sr-only">Any colour</span>
+            </label>
+          </div>
+        </fieldset>
+        <label class="tee__range">
+          <span class="label">Size</span>
+          <input type="range" name="size" min="0.6" max="1.5" step="0.05" value="1" />
+          <output data-tee-out="size">9.5 cm</output>
+        </label>
+        <label class="tee__range">
+          <span class="label">Height</span>
+          <input type="range" name="lift" min="-0.04" max="0.04" step="0.005" value="0" />
+          <output data-tee-out="lift">as usual</output>
+        </label>
+      </div>
+      <div class="tee__actions">
+        <button class="tee__make" type="button" data-tee-make>Make it</button>
+        <button class="tee__next" type="button" data-tee-goto="3">Next: the order</button>
+      </div>
+    </section>
+
+    <section class="tee__pane" id="tee-step-3" role="tabpanel" aria-labelledby="tee-tab-3" data-tee-pane="3" hidden>
+      <fieldset class="tee__group">
+        <legend class="label">How many of each size</legend>
+        <div class="tee__sizes">
+          {
+            sizes.map((z) => (
+              <label>
+                <span>{z.s}</span>
+                <input type="number" name={`q-${z.s}`} min="0" max="9999" step="1" inputmode="numeric" value={z.n} />
+              </label>
+            ))
+          }
+        </div>
+        <p class="tee__total"><b data-tee-total>50</b> pieces</p>
+      </fieldset>
+      <div class="tee__spec">
+        <p class="label">Your spec</p>
+        <ul data-tee-spec aria-live="polite"></ul>
+      </div>
+      <div class="tee__actions">
+        <a class="tee__make" href="#" target="_blank" rel="noopener" data-tee-order>Send it to Raphael ↗</a>
+        <button class="tee__next" type="button" data-tee-sheet>Save the spec sheet</button>
+      </div>
+    </section>
+  </form>
+</div>
+
+<style>
+  .tee {
+    display: grid;
+    gap: 16px;
+  }
+  .tee__stage {
+    position: relative;
+    aspect-ratio: 4 / 4.6;
+    border-radius: var(--radius);
+    overflow: clip;
+    background:
+      radial-gradient(ellipse at 50% 38%, #f6f3ec 0%, #e8e3d6 62%, #dcd7c9 100%);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .tee__poster {
+    position: absolute;
+    inset: 0;
+    opacity: 1;
+    transition: opacity 0.8s var(--ease-out);
+  }
+  .tee__poster :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .tee.is-ready .tee__poster {
+    opacity: 0;
+  }
+  .tee__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    touch-action: pan-y;
+    cursor: grab;
+  }
+  .tee__canvas:active {
+    cursor: grabbing;
+  }
+  .tee__hint {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    color: var(--ink-2);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+  .tee.is-ready .tee__hint {
+    opacity: 1;
+  }
+  .tee__blow {
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.7);
+    box-shadow: inset 0 0 0 1px var(--line);
+    color: var(--ink);
+  }
+  .tee__blow svg {
+    width: 20px;
+  }
+  /* what a drag does (turn / pull) and the two sides, over the stage's top */
+  .tee__tools {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+  .tee.is-ready .tee__tools {
+    opacity: 1;
+  }
+  .tee__mode,
+  .tee__views {
+    display: inline-flex;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.72);
+    box-shadow: inset 0 0 0 1px var(--line);
+    pointer-events: auto;
+  }
+  .tee__tools button {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink-2);
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+  .tee__tools button[aria-checked='true'] {
+    background: var(--ink);
+    color: var(--light);
+  }
+  .tee__views button:hover,
+  .tee__mode button[aria-checked='false']:hover {
+    color: var(--ink);
+  }
+  .tee__blow:hover {
+    background: var(--ink);
+    color: var(--light);
+  }
+  .tee__panel {
+    display: grid;
+    align-content: start;
+    gap: 16px;
+  }
+  /* the three steps: a segmented bar; the step's pane under it */
+  .tee__steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    padding: 3px;
+    border-radius: 12px;
+    background: var(--paper-2, #efece4);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .tee__steps button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    height: 36px;
+    border-radius: 9px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink-2);
+    transition:
+      background-color 0.3s,
+      color 0.3s,
+      box-shadow 0.3s;
+  }
+  .tee__steps b {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 0.68rem;
+    background: rgb(0 0 0 / 0.07);
+  }
+  .tee__steps button[aria-selected='true'] {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), inset 0 0 0 1px var(--line);
+  }
+  .tee__steps button[aria-selected='true'] b {
+    background: var(--turq-deep);
+    color: var(--light);
+  }
+  .tee__steps button:focus-visible {
+    outline: 2px solid var(--turq-deep);
+    outline-offset: 1px;
+  }
+  .tee__pane {
+    display: grid;
+    gap: 16px;
+    align-content: start;
+    animation: tee-pane 0.45s var(--ease-out);
+  }
+  .tee__pane[hidden] {
+    display: none;
+  }
+  @keyframes tee-pane {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+  .tee__group {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .tee__group legend {
+    margin-bottom: 7px;
+    color: var(--ink-2);
+  }
+  .tee__named {
+    color: var(--ink);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .tee__select {
+    width: 100%;
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: rgb(255 255 255 / 0.7);
+    font: inherit;
+    font-size: 0.88rem;
+    color: var(--ink);
+  }
+  .tee__select:focus-visible {
+    outline: 2px solid var(--turq-deep);
+  }
+  .tee__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .tee__swatch {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--c);
+    box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
+    cursor: pointer;
+    transition: transform 0.25s var(--ease-out);
+  }
+  .tee__swatches--sm .tee__swatch {
+    width: 22px;
+    height: 22px;
+  }
+  .tee__swatch input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .tee__swatch:has(input:checked) {
+    transform: scale(1.12);
+    box-shadow:
+      inset 0 0 0 1px rgb(0 0 0 / 0.18),
+      0 0 0 2px var(--paper),
+      0 0 0 3.5px var(--ink);
+  }
+  .tee__swatch:has(input:focus-visible) {
+    outline: 2px solid var(--turq-deep);
+    outline-offset: 3px;
+  }
+  /* any colour: a wheel of them, which opens the colour picker (and shows the colour once picked) */
+  .tee__swatch--any {
+    background: var(--c, conic-gradient(from 0deg, #e5484d, #f5a524, #f4e04d, #46a758, #3ee0d1, #3e63dd, #8e4ec6, #e5484d));
+  }
+  .tee__swatch--any.is-picked {
+    background:
+      radial-gradient(circle, var(--c) 52%, transparent 54%),
+      conic-gradient(from 0deg, #e5484d, #f5a524, #f4e04d, #46a758, #3ee0d1, #3e63dd, #8e4ec6, #e5484d);
+  }
+  .tee__swatch .tee__picker {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+  }
+  .tee__swatch--orig {
+    background: conic-gradient(#1c3f94 0 25%, #c8102e 0 50%, #f4c418 0 75%, #fff 0);
+  }
+  .tee__swatch--orig[hidden] {
+    display: none;
+  }
+  .tee__row {
+    display: flex;
+    gap: 8px;
+  }
+  .tee__text {
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: rgb(255 255 255 / 0.7);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  .tee__text:focus-visible {
+    outline: 2px solid var(--turq-deep);
+  }
+  .tee__upload {
+    position: relative;
+    height: 38px;
+    cursor: pointer;
+  }
+  .tee__upload input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .tee__logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: -6px 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-2);
+  }
+  .tee__logo[hidden] {
+    display: none;
+  }
+  .tee__logo button {
+    font-weight: 700;
+    color: var(--turq-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .tee__seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    border-radius: 8px;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    padding: 2px;
+    gap: 2px;
+  }
+  .tee__seg--fill {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+  .tee__seg label {
+    position: relative;
+    cursor: pointer;
+  }
+  .tee__seg input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .tee__seg span {
+    display: block;
+    padding: 7px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--ink-2);
+    transition:
+      background-color 0.25s,
+      color 0.25s;
+  }
+  .tee__seg input:checked + span {
+    background: var(--ink);
+    color: var(--light);
+  }
+  .tee__seg input:focus-visible + span {
+    outline: 2px solid var(--turq-deep);
+  }
+  .tee__f-classic {
+    font-family: Philosopher, Georgia, serif;
+  }
+  .tee__seg .tee__f-bold {
+    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 900;
+  }
+  .tee__seg .tee__f-script {
+    font-family: 'Segoe Script', 'Brush Script MT', 'Snell Roundhand', cursive;
+    font-style: italic;
+  }
+  /* the four places: each shows a dot when it carries a mark */
+  .tee__places {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .tee__places label {
+    position: relative;
+    cursor: pointer;
+  }
+  .tee__places input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .tee__places span {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 54px;
+    padding: 0 4px;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.6);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    font-size: 0.74rem;
+    font-weight: 700;
+    line-height: 1.15;
+    text-align: center;
+    color: var(--ink-2);
+    transition:
+      box-shadow 0.25s,
+      color 0.25s,
+      background-color 0.25s;
+  }
+  .tee__places input:checked + span {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 2px var(--ink);
+  }
+  .tee__places input:focus-visible + span {
+    outline: 2px solid var(--turq-deep);
+    outline-offset: 2px;
+  }
+  .tee__places i {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition: background-color 0.25s;
+  }
+  .tee__places i.is-on {
+    background: var(--turq);
+    box-shadow: none;
+  }
+  .tee__switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .tee__switch input {
+    appearance: none;
+    position: relative;
+    width: 38px;
+    height: 22px;
+    margin: 0;
+    border-radius: 999px;
+    background: var(--line-strong);
+    cursor: pointer;
+    transition: background-color 0.25s;
+  }
+  .tee__switch input::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+    transition: transform 0.25s var(--ease-out);
+  }
+  .tee__switch input:checked {
+    background: var(--turq-deep);
+  }
+  .tee__switch input:checked::after {
+    transform: translateX(16px);
+  }
+  .tee__switch input:focus-visible {
+    outline: 2px solid var(--turq-deep);
+    outline-offset: 2px;
+  }
+  .tee__mark {
+    display: grid;
+    gap: 14px;
+    transition: opacity 0.3s;
+  }
+  .tee__mark.is-off {
+    opacity: 0.38;
+    pointer-events: none;
+  }
+  .tee__range {
+    display: grid;
+    grid-template-columns: 54px 1fr 64px;
+    align-items: center;
+    gap: 10px;
+  }
+  .tee__range .label {
+    color: var(--ink-2);
+  }
+  .tee__range input {
+    width: 100%;
+    accent-color: var(--turq-deep);
+  }
+  .tee__range output {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .tee__sizes {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .tee__sizes label {
+    display: grid;
+    gap: 4px;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+  .tee__sizes input {
+    width: 100%;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid var(--line-strong);
+    background: rgb(255 255 255 / 0.7);
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .tee__sizes input:focus-visible {
+    outline: 2px solid var(--turq-deep);
+  }
+  .tee__total {
+    margin: 10px 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-2);
+  }
+  .tee__total b {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--ink);
+  }
+  .tee__spec {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.6);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .tee__spec .label {
+    margin: 0 0 6px;
+    color: var(--ink-2);
+  }
+  .tee__spec ul {
+    display: grid;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8rem;
+    line-height: 1.35;
+  }
+  .tee__spec li b {
+    font-weight: 700;
+  }
+  .tee__actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .tee__make {
+    display: inline-grid;
+    place-items: center;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: var(--turq-deep);
+    color: var(--light);
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.25s;
+  }
+  .tee__make:hover {
+    background: var(--ink);
+  }
+  .tee__next {
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-weight: 700;
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    transition:
+      background-color 0.25s,
+      color 0.25s;
+  }
+  .tee__next:hover {
+    background: var(--ink);
+    color: var(--light);
+  }
+  .tee__make:focus-visible,
+  .tee__next:focus-visible {
+    outline: 2px solid var(--turq-deep);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tee__pane {
+      animation: none;
+    }
+  }
+</style>

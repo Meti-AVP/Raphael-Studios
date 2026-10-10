@@ -1,0 +1,217 @@
+{
+ "adnoc-voyager": {
+  "width": 520,
+  "height": 149,
+  "coverage": 0.4056
+ },
+ "al-ahram": {
+  "width": 520,
+  "height": 125,
+  "coverage": 0.2484
+ },
+ "al-mokhtabar": {
+  "width": 314,
+  "height": 240,
+  "coverage": 0.2887
+ },
+ "arma": {
+  "width": 308,
+  "height": 107,
+  "coverage": 0.3489
+ },
+ "bobai": {
+  "width": 520,
+  "height": 170,
+  "coverage": 0.3609
+ },
+ "brix": {
+  "width": 252,
+  "height": 233,
+  "coverage": 0.4799
+ },
+ "btm": {
+  "width": 248,
+  "height": 166,
+  "coverage": 0.248
+ },
+ "catrion": {
+  "width": 279,
+  "height": 279,
+  "coverage": 0.9669
+ },
+ "concentrix": {
+  "width": 456,
+  "height": 81,
+  "coverage": 0.3789
+ },
+ "crystal": {
+  "width": 447,
+  "height": 153,
+  "coverage": 0.5805
+ },
+ "domty": {
+  "width": 350,
+  "height": 207,
+  "coverage": 0.6144
+ },
+ "el-hanim": {
+  "width": 320,
+  "height": 280,
+  "coverage": 0.4087
+ },
+ "electrostar": {
+  "width": 441,
+  "height": 71,
+  "coverage": 0.3322
+ },
+ "erada-finance": {
+  "width": 459,
+  "height": 212,
+  "coverage": 0.2515
+ },
+ "hany-saad": {
+  "width": 309,
+  "height": 225,
+  "coverage": 0.2823
+ },
+ "heineken": {
+  "width": 369,
+  "height": 189,
+  "coverage": 0.2175
+ },
+ "hla": {
+  "width": 303,
+  "height": 218,
+  "coverage": 0.2815
+ },
+ "iqos": {
+  "width": 246,
+  "height": 236,
+  "coverage": 0.1569
+ },
+ "kharafi-national": {
+  "width": 474,
+  "height": 159,
+  "coverage": 0.8751
+ },
+ "linah-farms": {
+  "width": 272,
+  "height": 291,
+  "coverage": 0.2788
+ },
+ "magic-pharma": {
+  "width": 520,
+  "height": 90,
+  "coverage": 0.226
+ },
+ "maridive": {
+  "width": 486,
+  "height": 135,
+  "coverage": 0.143
+ },
+ "mpg": {
+  "width": 375,
+  "height": 219,
+  "coverage": 0.2547
+ },
+ "orange": {
+  "width": 279,
+  "height": 279,
+  "coverage": 0.9395
+ },
+ "oxi": {
+  "width": 306,
+  "height": 199,
+  "coverage": 0.4854
+ },
+ "parkville": {
+  "width": 488,
+  "height": 101,
+  "coverage": 0.3965
+ },
+ "philip-morris": {
+  "width": 520,
+  "height": 324,
+  "coverage": 0.205
+ },
+ "rivoli": {
+  "width": 333,
+  "height": 116,
+  "coverage": 0.4479
+ },
+ "rixos": {
+  "width": 513,
+  "height": 258,
+  "coverage": 0.9462
+ },
+ "sami-amin": {
+  "width": 227,
+  "height": 240,
+  "coverage": 0.5693
+ },
+ "saudi-catering": {
+  "width": 227,
+  "height": 288,
+  "coverage": 0.196
+ },
+ "shutterstock": {
+  "width": 520,
+  "height": 81,
+  "coverage": 0.3118
+ },
+ "smart-furniture": {
+  "width": 502,
+  "height": 132,
+  "coverage": 0.3518
+ },
+ "starville": {
+  "width": 520,
+  "height": 134,
+  "coverage": 0.3108
+ },
+ "super-kids": {
+  "width": 264,
+  "height": 195,
+  "coverage": 0.4872
+ },
+ "totalenergies": {
+  "width": 318,
+  "height": 161,
+  "coverage": 0.4959
+ },
+ "toyota": {
+  "width": 378,
+  "height": 227,
+  "coverage": 0.1997
+ },
+ "transmar": {
+  "width": 423,
+  "height": 71,
+  "coverage": 0.3154
+ },
+ "virgin-megastore": {
+  "width": 279,
+  "height": 315,
+  "coverage": 0.8036
+ },
+ "wintershall-dea": {
+  "width": 313,
+  "height": 198,
+  "coverage": 0.1216
+ },
+ "zadea": {
+  "width": 436,
+  "height": 72,
+  "coverage": 0.2025
+ },
+ "zaro": {
+  "width": 179,
+  "height": 234,
+  "coverage": 0.2211
+ },
+ "zen-architects": {
+  "width": 309,
+  "height": 123,
+  "coverage": 0.5438
+ }
+}

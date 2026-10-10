@@ -1,0 +1,538 @@
+---
+// The fixed layer over the paintings: the construction drawing that draws itself while the first scene loads
+// (the studio's own: the frame's thirds and diagonals, an eight-pointed star of Cairo's geometry, compass arcs from
+// the frame's corners, the construction of the R), the frame with the title, and the chapter index. On scroll the
+// title goes to the top left and the index to the bottom left, where they stay as the page's navigation.
+//
+// States (data-* on the root, set by scripts/core/sidebar.ts):
+//   initiated   the page script runs: the lines start drawing, the title assembles
+//   loaded      the first scene is ready: the frame's line completes
+//   ready       the frame is complete: lines fade, the index and subtitle appear
+//   scrolled    the reader has left the hero
+//   active      which group of construction lines the current chapter shows (1..8)
+import { edition, chapters } from '../content/edition';
+---
+
+<div class="sal" data-section-name="side-and-lines" data-scrolled="false" data-loaded="false" data-ready="false">
+  <svg class="sal__lines" viewBox="550 208 340 464" fill="none" aria-hidden="true" data-active="7" data-animating="7">
+    <defs>
+      <pattern id="dashed-stroke" patternUnits="userSpaceOnUse" width="4" height="1"><rect x="0" y="0" width="1" height="1" class="sal__dash"></rect></pattern>
+      <pattern id="dashed-stroke-vertical" patternUnits="userSpaceOnUse" width="1" height="4"><rect x="0" y="0" width="1" height="1" class="sal__dash"></rect></pattern>
+    </defs>
+    <rect x="550" y="208" width="340" height="464" class="sal__loader" pathLength="1" stroke-linecap="square"></rect>
+    <rect x="550" y="208" width="340" height="464" class="sal__complete" pathLength="1" stroke-linecap="square"></rect>
+    <path d="M-1600 362.67H3040" pathLength="1" data-group="1,6,7" data-dashed="1"></path>
+    <path d="M-1600 517.33H3040" pathLength="1" data-group="1,6,7"></path>
+    <path d="M663.33 -1000V1880" pathLength="1" data-group="1,2,6" data-dashed-v="1,2"></path>
+    <path d="M776.67 -1000V1880" pathLength="1" data-group="1,2,6,8"></path>
+    <path d="M-1600 440H3040" pathLength="1" data-group="2,3,5,7"></path>
+    <path d="M720 -1000V1880" pathLength="1" data-group="3,4,5,7,8"></path>
+    <path d="M-335.2,-1000L1775.2,1880" pathLength="1" data-group="1,4,7"></path>
+    <path d="M1775.2,-1000L-335.2,1880" pathLength="1" data-group="1,4,7"></path>
+    <path d="M-694.2,-974.2L2134.2,1854.2" pathLength="1" data-group="3,8"></path>
+    <path d="M2134.2,-974.2L-694.2,1854.2" pathLength="1" data-group="3,8"></path>
+    <path d="M-1127.8,-325.4L2567.8,1205.4" pathLength="1" data-group="4"></path>
+    <path d="M-45.4,-1407.8L1485.4,2287.8" pathLength="1" data-group="4,5"></path>
+    <path d="M1485.4,-1407.8L-45.4,2287.8" pathLength="1" data-group="4,5"></path>
+    <path d="M2567.8,-325.4L-1127.8,1205.4" pathLength="1" data-group="4"></path>
+    <path d="M600 320H840V560H600Z" pathLength="1" data-group="2,7,8"></path>
+    <path d="M720 270.29L889.71 440L720 609.71L550.29 440Z" pathLength="1" data-group="3,7,8"></path>
+    <circle cx="720" cy="440" r="120" pathLength="1" data-group="2,6,7" class="r45"></circle>
+    <circle cx="720" cy="440" r="169.71" pathLength="1" data-group="3,4,7" class="r-45"></circle>
+    <circle cx="720" cy="440" r="232" pathLength="1" data-group="5" class="r45"></circle>
+    <circle cx="550" cy="208" r="340" pathLength="1" data-group="2,5" class="r45"></circle>
+    <circle cx="890" cy="208" r="340" pathLength="1" data-group="5,6" class="r-45"></circle>
+    <circle cx="550" cy="672" r="340" pathLength="1" data-group="5,6" class="r-45"></circle>
+    <circle cx="890" cy="672" r="340" pathLength="1" data-group="2,5" class="r45"></circle>
+    <path d="M590 300H850" pathLength="1" data-group="6,8"></path>
+    <path d="M590 580H850" pathLength="1" data-group="6,8"></path>
+    <path d="M640 300V580" pathLength="1" data-group="6,8"></path>
+    <circle cx="690" cy="370" r="70" pathLength="1" data-group="6,8" class="r-45"></circle>
+    <path d="M682 440L800 580" pathLength="1" data-group="6,8"></path>
+  </svg>
+
+  <aside class="sal__side" aria-label="Chapters">
+    <nav class="sal__frame" aria-label="Chapters">
+      <svg class="sal__border" viewBox="550 208 340 464" fill="none" aria-hidden="true">
+        <rect x="550" y="208" width="340" height="464" pathLength="1" stroke-linecap="square"></rect>
+      </svg>
+      <h2 class="sal__title headline-4">
+        <a href="#top" class="sal__title-link" data-cursor="Back to the top">
+          <span class="sr-only">{edition.title.join(' ')} — {edition.script}</span>
+          <span class="sal__lockup" aria-hidden="true">
+            <span class="sal__word sal__word--1">{edition.title[0]}</span>
+            <span class="sal__word sal__word--2">{edition.title[1]}</span>
+            <span class="sal__script">{edition.script}</span>
+          </span>
+        </a>
+      </h2>
+      <div class="sal__body">
+        <p class="sal__subtitle narrative-2">{edition.subtitle}</p>
+        <ol class="sal__index" role="list">
+          {
+            chapters.map((c, i) => (
+              <li style={`--index:${i + 1}`} data-index={i + 1}>
+                <a href={`#${c.id}`} data-chapter={c.id}>
+                  <span class="sal__name">
+                    <span class="headline-6">{c.name}</span>
+                  </span>
+                  <span class="sal__num" aria-hidden="true">
+                    {c.numeral}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </nav>
+    <div class="sal__terms">
+      <p class="label">{edition.copyright}</p>
+      <p class="sal__since">Creative Hub · since 2011</p>
+    </div>
+  </aside>
+</div>
+
+<style>
+  .sal {
+    --lines-loading-duration: 6s;
+    --lines-complete-duration: 1s;
+    --lines-duration: 3s;
+    --fade-out-duration: 0.52s;
+    --fade-initial-delay: 0.2s;
+    --slide-duration: 0.6s;
+    --slide-delay: calc(var(--fade-initial-delay) + var(--fade-out-duration));
+    --scroll-state-duration: 0.6s;
+    --scroll-state-easing: cubic-bezier(0.41, 0.19, 0.13, 0.95);
+    --stagger-fade-in-delay: 75ms;
+    --stagger-slide-delay: 20ms;
+    --frame-w: min(340px, calc(100vw - 24px));
+    --frame-h: calc(var(--frame-w) * 464 / 340);
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    color: var(--light);
+    /* the drawing runs far past the screen: keep it from widening the page on phones */
+    overflow: clip;
+  }
+
+  /* ---------------------------------------------------------------- the construction drawing */
+  .sal__lines {
+    position: absolute;
+    left: 50%;
+    top: 50svh;
+    width: var(--frame-w);
+    height: var(--frame-h);
+    translate: -50% -50%;
+    overflow: visible;
+    color: var(--light);
+  }
+  .sal__dash {
+    fill: currentColor;
+    opacity: 0.2;
+  }
+  .sal__lines :is(path, circle) {
+    fill: none;
+    stroke: rgb(255 255 255 / 0.15);
+    stroke-width: 0.4px;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1px;
+    transform-box: fill-box;
+    transform-origin: 50%;
+    transition:
+      stroke-dashoffset var(--lines-duration) var(--ease-lines),
+      stroke var(--lines-duration) var(--ease-lines) calc(var(--lines-duration) * 0.7);
+  }
+  .sal__lines .r45 {
+    rotate: 45deg;
+  }
+  .sal__lines .r-45 {
+    rotate: -45deg;
+  }
+  /* each chapter shows its own group of lines; they draw bright, then settle to a faint trace */
+  .sal__lines[data-active='1'] [data-group*='1'],
+  .sal__lines[data-active='2'] [data-group*='2'],
+  .sal__lines[data-active='3'] [data-group*='3'],
+  .sal__lines[data-active='4'] [data-group*='4'],
+  .sal__lines[data-active='5'] [data-group*='5'],
+  .sal__lines[data-active='6'] [data-group*='6'],
+  .sal__lines[data-active='7'] [data-group*='7'],
+  .sal__lines[data-active='8'] [data-group*='8'] {
+    stroke-dashoffset: 0;
+  }
+  .sal__lines[data-animating='1'] [data-group*='1'],
+  .sal__lines[data-animating='2'] [data-group*='2'],
+  .sal__lines[data-animating='3'] [data-group*='3'],
+  .sal__lines[data-animating='4'] [data-group*='4'],
+  .sal__lines[data-animating='5'] [data-group*='5'],
+  .sal__lines[data-animating='6'] [data-group*='6'],
+  .sal__lines[data-animating='7'] [data-group*='7'],
+  .sal__lines[data-animating='8'] [data-group*='8'] {
+    animation:
+      draw-line var(--lines-duration) var(--ease-lines) both,
+      line-fade 4s ease-out forwards;
+  }
+  @keyframes draw-line {
+    from {
+      stroke-dashoffset: 1px;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .sal__lines[data-active='1'] [data-dashed*='1'] {
+    stroke: url(#dashed-stroke);
+  }
+  .sal__lines[data-active='1'] [data-dashed-v*='1'],
+  .sal__lines[data-active='2'] [data-dashed-v*='2'] {
+    stroke: url(#dashed-stroke-vertical);
+  }
+  /* the frame doubles as the loading bar: it draws to 80% over six seconds, then completes when the scene is in */
+  .sal__loader,
+  .sal__complete {
+    stroke: currentColor;
+    stroke-width: 1px;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1px;
+    fill: none;
+  }
+  .sal__loader {
+    animation: load-lines var(--lines-loading-duration) var(--ease-loading) both;
+  }
+  .sal__complete {
+    transition:
+      opacity var(--fade-out-duration) var(--ease-fade),
+      stroke-dashoffset var(--lines-complete-duration) var(--ease-complete);
+  }
+  .sal[data-loaded='true'] .sal__complete {
+    stroke-dashoffset: 0;
+  }
+  .sal[data-ready='true'] :is(.sal__loader, .sal__complete) {
+    opacity: 0;
+    transition: opacity var(--fade-out-duration) var(--ease-fade);
+  }
+  @keyframes load-lines {
+    to {
+      stroke-dashoffset: 0.2px;
+    }
+  }
+  @keyframes line-fade {
+    0% {
+      stroke: rgb(255 255 255 / 0.75);
+    }
+    to {
+      stroke: rgb(255 255 255 / 0.15);
+    }
+  }
+
+  /* ---------------------------------------------------------------- the frame, the title, the index */
+  .sal__side {
+    position: absolute;
+    inset: 0;
+    container-type: size;
+  }
+  .sal__frame {
+    position: absolute;
+    left: 50%;
+    top: 50svh;
+    width: var(--frame-w);
+    height: var(--frame-h);
+    translate: -50% -50%;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .sal__border {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  /* on a phone the frame covers most of the painting, whose brightest parts (the work flying out of the bag) lie under
+     the title: a soft shade inside the frame keeps the words readable */
+  @media (max-width: 939px) {
+    .sal__frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(120% 90% at 30% 40%, rgb(8 14 14 / 0.62), rgb(8 14 14 / 0.28) 70%, transparent);
+      opacity: 0;
+      transition: opacity var(--fade-out-duration) var(--ease-fade);
+    }
+    .sal[data-ready='true'] .sal__frame::before {
+      opacity: 1;
+    }
+  }
+  .sal__border rect {
+    stroke: currentColor;
+    stroke-width: 1px;
+    opacity: 0;
+    transition: opacity var(--fade-out-duration) var(--ease-fade);
+  }
+  .sal[data-ready='true'] .sal__border rect {
+    opacity: 1;
+  }
+  .sal[data-scrolled='true'][data-ready='true'] .sal__border rect {
+    opacity: 0;
+  }
+
+  .sal__title {
+    position: relative;
+    z-index: 2;
+    width: 70%;
+  }
+  .sal__title-link {
+    display: inline-block;
+    pointer-events: auto;
+    color: var(--light);
+    transition: color 0.3s var(--ease-in-out);
+  }
+  .sal__lockup {
+    display: grid;
+    transform-origin: 0 0;
+  }
+  .sal__word,
+  .sal__script {
+    display: block;
+  }
+  .sal__script {
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: 1.6em;
+    line-height: 0.62;
+    letter-spacing: 0;
+    color: var(--turq-bright);
+    margin: 0.06em 0 0 0.04em;
+    white-space: nowrap;
+  }
+  /* the lockup assembles: the name fades in, then the script slides in under it */
+  .sal__word,
+  .sal__script {
+    opacity: 0;
+  }
+  /* from the first paint, no script needed: the name fades in, the script slides under it, then "Studios" */
+  .sal__word--1 {
+    animation: fade-in var(--fade-out-duration) var(--ease-fade) var(--fade-initial-delay) both;
+  }
+  .sal__script {
+    animation:
+      slide-in var(--slide-duration) var(--ease-complete) var(--slide-delay) both,
+      fade-in var(--slide-duration) var(--ease-fade) var(--slide-delay) both;
+  }
+  .sal__word--2 {
+    animation: fade-in var(--fade-out-duration) var(--ease-fade) calc(var(--slide-delay) + var(--slide-duration)) both;
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-in {
+    from {
+      transform: translateX(-140%);
+    }
+  }
+
+  .sal__body {
+    position: relative;
+    z-index: 2;
+  }
+  .sal__subtitle {
+    max-width: 17em;
+    margin-top: 6px;
+    font-size: 1.0625rem;
+    line-height: 1.02;
+    /* visible from the first paint (it is the page's main text): it only settles into place */
+    animation: settle 1.1s var(--ease-out) 0.1s both;
+    transition: opacity var(--scroll-state-duration) var(--scroll-state-easing);
+  }
+  @keyframes settle {
+    from {
+      transform: translateY(8px);
+    }
+  }
+  .sal[data-scrolled='true'] .sal__subtitle {
+    opacity: 0;
+  }
+  .sal__index {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .sal__index li {
+    opacity: 0;
+  }
+  .sal[data-ready='true'] .sal__index li {
+    animation: fade-in var(--scroll-state-duration) var(--scroll-state-easing) both;
+    animation-delay: calc(var(--index) * var(--stagger-fade-in-delay));
+  }
+  .sal__index a {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    width: 100%;
+    min-height: 24px; /* a comfortable target */
+    padding: 0;
+    pointer-events: auto;
+    color: var(--light);
+  }
+  .sal__name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  .sal__name::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    clip-path: inset(0 100% 0 0);
+    background-image: linear-gradient(270deg, currentColor 1px, transparent 1px);
+    background-size: 3px 100%;
+    background-repeat: repeat-x;
+    transform: translateY(3px);
+    transition: clip-path 0.3s ease-in-out 0.15s;
+    opacity: 0.8;
+  }
+  .sal__num {
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    color: rgb(247 245 238 / 0.6);
+    transition: color 0.3s var(--ease-in-out);
+  }
+  .sal__index a:hover .sal__name::after,
+  .sal__index a:focus-visible .sal__name::after,
+  .sal__index li.is-active .sal__name::after {
+    clip-path: inset(0);
+  }
+  .sal__index a:hover .sal__num,
+  .sal__index li.is-active .sal__num {
+    color: var(--light);
+  }
+  .sal__index li.is-active .sal__name > span {
+    color: var(--turq-bright);
+  }
+  /* once a chapter is active (after the hero), the others step back */
+  .sal[data-done='true'][data-scrolled='true'] .sal__index li:not(.is-active) :is(.sal__name, .sal__num) {
+    color: rgb(247 245 238 / 0.6);
+  }
+  .sal[data-done='true'][data-scrolled='true'] .sal__index li:not(.is-active) a:hover :is(.sal__name, .sal__num) {
+    color: var(--light);
+  }
+
+  /* on paper, the index and the title turn to ink */
+  :global(html[data-title-theme='paper']) .sal__title-link,
+  /* the construction lines belong to the paintings: on the paper they would cross the work (a dark shirt, a photo) */
+  .sal__lines {
+    transition: opacity 0.6s;
+  }
+  :global(html[data-side-theme='paper']) .sal__lines {
+    opacity: 0;
+  }
+  :global(html[data-side-theme='paper']) .sal__index a,
+  :global(html[data-side-theme='paper']) .sal__terms {
+    color: var(--ink);
+  }
+  :global(html[data-side-theme='paper']) .sal__num {
+    color: rgb(40 40 28 / 0.6);
+  }
+  :global(html[data-side-theme='paper']) .sal__index li.is-active .sal__name > span {
+    color: var(--turq-deep);
+  }
+  :global(html[data-side-theme='paper']) .sal[data-done='true'][data-scrolled='true'] .sal__index li:not(.is-active) :is(.sal__name, .sal__num) {
+    color: rgb(40 40 28 / 0.55);
+  }
+  :global(html[data-title-theme='paper']) .sal__script {
+    color: var(--turq-deep);
+  }
+
+  .sal__terms {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 24px;
+    opacity: 0;
+    transition: opacity var(--fade-out-duration) var(--ease-fade);
+    color: var(--light);
+  }
+  .sal__since {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  /* ---------------------------------------------------------------- scrolled: the title and the index move to the side */
+  .sal[data-ready='true'] .sal__title,
+  .sal[data-ready='true'] .sal__index,
+  .sal[data-ready='true'] .sal__index li,
+  .sal[data-ready='true'] .sal__lockup {
+    transition:
+      translate var(--scroll-state-duration) var(--scroll-state-easing),
+      scale var(--scroll-state-duration) var(--scroll-state-easing),
+      width var(--scroll-state-duration) var(--scroll-state-easing),
+      opacity var(--scroll-state-duration) var(--scroll-state-easing);
+  }
+  .sal[data-ready='true'] .sal__index li {
+    transition-delay: calc(var(--index) * var(--stagger-slide-delay));
+  }
+  @media (min-width: 940px) {
+    .sal[data-scrolled='true'] .sal__title {
+      translate: calc(-50cqi + var(--frame-w) / 2 - 20px + var(--gutter)) calc(-50cqb + var(--frame-h) / 2 - 20px + 76px);
+    }
+    .sal[data-scrolled='true'] .sal__lockup {
+      scale: 0.75;
+    }
+    .sal[data-scrolled='true'] .sal__index {
+      width: 160px;
+      translate: 0 calc(50cqb - var(--frame-h) / 2 + 20px - 80px);
+    }
+    .sal[data-scrolled='true'] .sal__index li {
+      translate: calc(-50cqi + var(--frame-w) / 2 - 20px + var(--gutter)) 0;
+    }
+    .sal[data-scrolled='true'][data-ready='true'] .sal__terms {
+      opacity: 1;
+    }
+  }
+  /* v4: on the paper (computers), the title and the index step aside and the work takes the whole width; they come
+     back over the paintings. The bar's "Chapters" menu is there all the time. */
+  @media (min-width: 940px) {
+    .sal[data-ready='true'] :is(.sal__title, .sal__index, .sal__terms) {
+      transition:
+        translate var(--scroll-state-duration) var(--scroll-state-easing),
+        scale var(--scroll-state-duration) var(--scroll-state-easing),
+        width var(--scroll-state-duration) var(--scroll-state-easing),
+        opacity 0.45s var(--ease-fade);
+    }
+    :global(html[data-side-theme='paper']) .sal[data-scrolled='true'] :is(.sal__index, .sal__terms),
+    :global(html[data-title-theme='paper']) .sal[data-scrolled='true'] .sal__title {
+      opacity: 0;
+      pointer-events: none;
+    }
+    :global(html[data-side-theme='paper']) .sal[data-scrolled='true'] .sal__index a,
+    :global(html[data-title-theme='paper']) .sal[data-scrolled='true'] .sal__title-link {
+      pointer-events: none;
+    }
+  }
+  /* phones: the frame stays the title card; after the hero it hides and the menu takes over */
+  @media (max-width: 939px) {
+    .sal[data-scrolled='true'] .sal__frame {
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity var(--scroll-state-duration) var(--scroll-state-easing),
+        visibility 0s linear var(--scroll-state-duration);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sal__lines {
+      display: none;
+    }
+  }
+</style>

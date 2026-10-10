@@ -1,0 +1,89 @@
+---
+// The last page of the profile (p23): the studio's address and how to reach Rafik Roushdy, on the paper.
+import { company } from '../content/site';
+const c = company.contact;
+const wa = `https://wa.me/${c.whatsapp}?text=${encodeURIComponent('Hello Raphael Studios, I would like to talk about a project.')}`;
+---
+
+<section class="contact" id="contact" data-paper aria-labelledby="contact-title">
+  <div class="contact__inner">
+    <h2 class="contact__title headline-2" id="contact-title">Let’s talk</h2>
+    <p class="contact__lead narrative drop-cap">We don’t just create campaigns — we build brands, inspire experiences and bring ideas to life.</p>
+    <div class="contact__grid">
+      <div>
+        <p class="label">{c.person}, {c.role}</p>
+        <p class="contact__big"><a href={`mailto:${c.email}`}>{c.email}</a></p>
+      </div>
+      <div>
+        <p class="label">Mobile and WhatsApp</p>
+        <p class="contact__big"><a href={c.mobileHref}>{c.mobile}</a></p>
+        <p><a class="pill" href={wa} target="_blank" rel="noopener">Message on WhatsApp <span aria-hidden="true">↗</span></a></p>
+      </div>
+      <div>
+        <p class="label">Office</p>
+        <p class="contact__big"><a href={c.officeHref}>{c.office}</a></p>
+      </div>
+      <div>
+        <p class="label">Studio</p>
+        <p class="contact__big"><a href={c.mapsHref} target="_blank" rel="noopener">{c.address[0]}<br />{c.address[1]}</a></p>
+      </div>
+    </div>
+    <p class="contact__foot label">© {company.name} {company.descriptor} · {company.city}, since {company.founded}</p>
+  </div>
+</section>
+
+<style>
+  .contact {
+    position: relative;
+    color: var(--ink);
+    padding: 26svh 0 12svh;
+  }
+  :global(html.no-stage) .contact {
+    background: var(--paper);
+  }
+  .contact__inner {
+    padding: 0 var(--gutter);
+    max-width: 1240px;
+    background: var(--paper);
+  }
+  @media (min-width: 940px) {
+    .contact {
+      margin-left: var(--side-w);
+    }
+  }
+  .contact__title {
+    margin-bottom: 30px;
+  }
+  .contact__lead {
+    max-width: 20em;
+    padding-left: 0.42em;
+    margin-bottom: 70px;
+  }
+  .contact__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 36px 48px;
+    border-top: 1px solid var(--line-strong);
+    padding-top: 28px;
+  }
+  .contact__grid .label {
+    margin-bottom: 8px;
+    color: var(--ink-2);
+  }
+  .contact__big {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 1rem + 0.9vw, 1.8rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    overflow-wrap: anywhere;
+  }
+  .contact__big a:hover {
+    color: var(--turq-deep);
+  }
+  .contact__foot {
+    margin-top: 80px;
+    color: var(--ink-2);
+  }
+</style>

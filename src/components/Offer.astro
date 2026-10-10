@@ -1,0 +1,74 @@
+---
+// What the studio does in a chapter: its services as a numbered list in large type; on a computer, a picture of the
+// work follows the pointer over each line. Then the way to start a project.
+import Media from './Media.astro';
+import type { EditionChapter } from '../content/edition';
+import { visible } from '../content/policy';
+import { company } from '../content/site';
+
+interface Props {
+  chapter: EditionChapter;
+  pictures: string[];
+}
+const { chapter: c, pictures } = Astro.props;
+// one line per service, from the profile's chapter texts (p6–p21)
+const notes: Record<string, string> = {
+  'Promotional Gifts': 'Custom gifts that strengthen recognition and engagement.',
+  Packaging: 'Functional, beautiful packaging that presents the product.',
+  Giveaways: 'High-quality promotional products people keep.',
+  'Corporate Uniform': 'Uniforms that reflect the brand: comfortable, durable, professional.',
+  'High-End Customized Sampling': 'One-off samples, refined with you before production.',
+  'Mass Production': 'Large-scale manufacturing with consistent quality, on time.',
+  'POS Materials': 'Displays, signage, wobblers, shelf branding and stands.',
+  'Events and Trophies': 'Event production, and the trophies and awards for it.',
+  'Fashion Brand': 'Collections designed and made for fashion labels.',
+  'Photography Services': 'Products, brands and events, with creative direction.',
+  '3D Creative Ideas': '3D visualizations and mock-ups before anything is built.',
+  'Corporate Identities': 'Visual identities, logo systems and guidelines.',
+  'Corporate Branding': 'One brand, consistent across every touchpoint.',
+  'Creative Concepts & Art Directions': 'The idea and the look, from concept to artwork.',
+  Posters: 'Posters that carry a campaign.',
+  Ads: 'Ads for print, screens and social.',
+  'Full Media Campaigns': 'Campaigns planned across every medium.',
+  'Social Media Campaigns': 'Content and campaigns for social platforms.',
+  'Full Marketing Campaigns': 'From the plan to the last activation.',
+  'Marketing Plan Proposals': 'Plans and proposals that win the brief.',
+  'Outdoor Campaigns': 'High-impact outdoor advertising.',
+  'Proposals and Presentations': 'Proposals and presentations designed to persuade.',
+};
+const pics = pictures.filter(visible);
+const pad = (n: number) => String(n).padStart(2, '0');
+const wa = `https://wa.me/${company.contact.whatsapp}?text=${encodeURIComponent(`Hello Raphael Studios, we would like to start a ${c.full.toLowerCase()} project.`)}`;
+---
+
+<div class="offer" data-module="offer">
+  <h3 class="offer__label label" data-reveal="fade">What we do · {c.full}</h3>
+  <ol class="offer__list" role="list">
+    {
+      c.services.map((s, i) => (
+        <li class="offer__row" data-offer-row={pics.length ? i % pics.length : undefined} data-reveal="fade">
+          <span class="offer__num">{pad(i + 1)}</span>
+          <span class="offer__name">{s}</span>
+          <span class="offer__note">{notes[s] ?? ''}</span>
+        </li>
+      ))
+    }
+  </ol>
+  {
+    pics.length > 0 && (
+      <div class="offer__float" aria-hidden="true">
+        {pics.map((id) => (
+          <div class="offer__pic">
+            <Media id={id} sizes="320px" widths={[320, 480]} decorative />
+          </div>
+        ))}
+      </div>
+    )
+  }
+  <a class="project" href={wa} target="_blank" rel="noopener" data-cursor="WhatsApp">
+    <span class="project__text">Start a {/^[A-Z0-9]+$/.test(c.name) ? c.name : c.name.toLowerCase()} project</span>
+    <span class="project__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </span>
+  </a>
+</div>

@@ -1,0 +1,61 @@
+/* Reveal-on-scroll. Elements start visible; only when JavaScript runs (html.js) and motion is allowed do they
+   wait for `.is-in`, which src/scripts/core/reveal.ts adds as they enter the viewport. */
+
+html.js:not(.reduce-motion) [data-reveal] {
+  --reveal-delay: 0s;
+}
+
+/* plain fade with a small rise */
+html.js:not(.reduce-motion) [data-reveal='fade'] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 1s var(--ease-out),
+    transform 1.2s var(--ease-out);
+  transition-delay: var(--reveal-delay);
+}
+html.js:not(.reduce-motion) [data-reveal='fade'].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* the chapter titles rise out of a mask, letter by letter (the splitter wraps them in .rv-mask > .rv-ink) */
+.rv-mask {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.14em;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.rv-ink {
+  display: inline-block;
+  will-change: transform;
+}
+html.js:not(.reduce-motion) [data-reveal='title'] .rv-ink {
+  transform: translate3d(0, 108%, 0) rotate(3deg);
+  transition: transform 1.1s var(--ease-out);
+  transition-delay: calc(var(--reveal-delay) + var(--i, 0) * 0.035s);
+}
+html.js:not(.reduce-motion) [data-reveal='title'].is-in .rv-ink {
+  transform: none;
+}
+html.js:not(.reduce-motion) [data-reveal='title']:not(.is-split) {
+  opacity: 0;
+}
+
+/* pictures: they settle from a slight zoom and fade in (no clip: a clipped picture would never start loading) */
+html.js:not(.reduce-motion) [data-reveal='image'] {
+  opacity: 0;
+  transition: opacity 1s var(--ease-out);
+}
+html.js:not(.reduce-motion) [data-reveal='image'] img {
+  transform: scale(1.08);
+  transition: transform 1.6s var(--ease-out);
+}
+html.js:not(.reduce-motion) [data-reveal='image'].is-in {
+  opacity: 1;
+}
+html.js:not(.reduce-motion) [data-reveal='image'].is-in img {
+  transform: none;
+}

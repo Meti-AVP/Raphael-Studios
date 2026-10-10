@@ -1,0 +1,102 @@
+---
+// The giveaways studio: "Summer, branded". Things the studio makes for brands (a beach ball, a football, bottles,
+// tumblers, mugs, caps, notebooks, pens, totes, gift boxes, beach towels) rain onto the sand with your brand on
+// them, and pile up as real things do (scripts/rain). Before the 3D is ready, and where it cannot run, the photo of
+// a real giveaway set stays.
+import Media from './Media.astro';
+const colours = [
+  { name: 'Raphael turquoise', hex: '#19b5a8' },
+  { name: 'Coral', hex: '#e2604a' },
+  { name: 'Navy', hex: '#1f2a44' },
+  { name: 'Sun yellow', hex: '#e8b230' },
+  { name: 'Ink', hex: '#2b2b25' },
+  { name: 'Leaf', hex: '#3f7d4e' },
+];
+// what is in the set (scripts/rain/items.ts): each can be left out, and only those kept fall
+const kinds = [
+  { id: 'beachball', name: 'Beach ball' },
+  { id: 'football', name: 'Football' },
+  { id: 'bottle', name: 'Steel bottle' },
+  { id: 'tumbler', name: 'Tumbler' },
+  { id: 'mug', name: 'Mug' },
+  { id: 'cap', name: 'Cap' },
+  { id: 'notebook', name: 'Notebook' },
+  { id: 'pen', name: 'Pen' },
+  { id: 'tote', name: 'Tote' },
+  { id: 'gift', name: 'Gift box' },
+  { id: 'towel', name: 'Beach towel' },
+];
+---
+
+<div class="studio rain" data-module="rain">
+  <div class="studio__stage rain__stage">
+    <div class="studio__poster" aria-hidden="true">
+      <Media id="iqos-totes" sizes="(min-width: 940px) 46vw, 92vw" decorative />
+    </div>
+    <canvas
+      class="studio__canvas"
+      role="img"
+      aria-label="Branded giveaways falling onto the sand in 3D: a beach ball, a football, bottles, tumblers, mugs, caps, notebooks, pens, a tote, gift boxes and beach towels. Pick one up and throw it."
+      data-cursor="Throw"></canvas>
+    <p class="studio__caption label" data-rain-caption aria-live="polite">Summer, branded</p>
+    <p class="studio__hint label" data-rain-hint aria-hidden="true">Pick one up and throw it</p>
+  </div>
+
+  <form class="studio__panel" data-rain-form onsubmit="return false">
+    <fieldset class="studio__group studio__wide">
+      <legend class="label">Your brand on everything</legend>
+      <div class="studio__row">
+        <input class="studio__text" type="text" name="text" maxlength="24" placeholder="Your brand" value="Raphael Studios" autocomplete="organization" aria-label="Your brand's name" />
+        <label class="studio__upload pill">
+          Logo
+          <input type="file" name="logo" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+        </label>
+      </div>
+      <div class="studio__logo" data-rain-logo hidden>
+        <span data-rain-logo-name>Your logo</span>
+        <label class="studio__check"><input type="checkbox" name="own" /><span>In its own colours</span></label>
+        <button type="button" data-rain-logo-clear>Use the name</button>
+      </div>
+    </fieldset>
+    <fieldset class="studio__group">
+      <legend class="label">Its colour</legend>
+      <div class="studio__swatches" role="radiogroup" aria-label="Brand colour">
+        {
+          colours.map((c, i) => (
+            <label class="studio__swatch" style={`--c:${c.hex}`} title={c.name}>
+              <input type="radio" name="colour" value={c.hex} checked={i === 0} />
+              <span class="sr-only">{c.name}</span>
+            </label>
+          ))
+        }
+        <label class="studio__swatch studio__swatch--any" title="Any colour: your brand's own">
+          <input type="radio" name="colour" value="any" />
+          <input class="studio__picker" type="color" name="colourAny" value="#7a4fd8" aria-label="Any brand colour" />
+          <span class="sr-only">Any colour</span>
+        </label>
+      </div>
+    </fieldset>
+    <fieldset class="studio__group">
+      <legend class="label">How many sets</legend>
+      <input class="studio__num" type="number" name="sets" min="10" max="100000" step="10" value="100" inputmode="numeric" aria-label="How many sets" />
+    </fieldset>
+    <fieldset class="studio__group studio__wide">
+      <legend class="label">In the set</legend>
+      <div class="studio__chips">
+        {
+          kinds.map((k) => (
+            <label>
+              <input type="checkbox" name="kind" value={k.id} checked />
+              <span>{k.name}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+    <div class="studio__actions">
+      <button class="studio__main" type="button" data-rain-shake>Shake it</button>
+      <button class="studio__second" type="button" data-rain-more>More, please</button>
+      <a class="pill" href="#" target="_blank" rel="noopener" data-rain-order>Ask for these giveaways ↗</a>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,47 @@
+---
+// Unknown addresses: a painting not painted yet, and the way back.
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Not painted yet — Raphael Studios" description="This page does not exist.">
+  <section class="nf">
+    <p class="nf__num" aria-hidden="true">CDIV</p>
+    <h1 class="nf__title narrative drop-cap">This page is not painted yet.</h1>
+    <p class="nf__text body-copy">The address may have changed, or the canvas is still blank.</p>
+    <a class="nf__link pill" href="/">Back to the studio</a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100svh;
+    display: grid;
+    place-content: center;
+    gap: 22px;
+    padding: 40px var(--gutter);
+    background: var(--paper);
+    color: var(--ink);
+    text-align: left;
+  }
+  .nf__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(5rem, 3rem + 10vw, 12rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--turq-deep);
+  }
+  .nf__title {
+    max-width: 14em;
+    padding-left: 0.42em;
+  }
+  .nf__text {
+    color: var(--ink-2);
+    max-width: 30em;
+  }
+  .nf__link {
+    justify-self: start;
+    font-size: 0.9rem;
+    padding: 0.7em 1em;
+  }
+</style>

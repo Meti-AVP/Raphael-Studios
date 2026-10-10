@@ -1,0 +1,109 @@
+/* Design tokens: the only place colours, type, spacing and motion are defined. */
+
+@font-face {
+  font-family: 'Philosopher';
+  src: url('/fonts/philosopher-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Philosopher';
+  src: url('/fonts/philosopher-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Philosopher';
+  src: url('/fonts/philosopher-400-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('/fonts/source-sans-3-var.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Imperial Script';
+  src: url('/fonts/imperial-script-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Fallbacks sized like the web fonts, so nothing moves when they arrive (values: tools/fonts/build_fonts.py) */
+@font-face {
+  font-family: 'Philosopher Fallback';
+  src: local('Georgia');
+  size-adjust: 99.6%;
+  ascent-override: 90.4%;
+  descent-override: 22.1%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Source Sans 3 Fallback';
+  src: local('Arial');
+  size-adjust: 89.5%;
+  ascent-override: 114.4%;
+  descent-override: 44.7%;
+  line-gap-override: 0%;
+}
+
+:root {
+  /* colour: warm paper and ink (the painted edition), with Raphael turquoise as the one accent */
+  --black: #000;
+  --light: #f7f5ee; /* text on the paintings */
+  --paper: #ebe8df; /* the chapters' paper (the stage paints the same colour: stage.ts reads this) */
+  --paper-2: #e9e6db; /* cards on the paper */
+  --paper-3: #cfcabb;
+  --grey-mid: #929083;
+  --grey-dark: #5e5c4f;
+  --ink: #28281c;
+  --ink-2: #4d4c3f;
+  --line: rgb(40 40 28 / 0.16);
+  --line-strong: rgb(40 40 28 / 0.34);
+  --line-light: rgb(247 245 238 / 0.22);
+  --turq: #19b5a8;
+  --turq-bright: #3ee0d1;
+  --turq-deep: #0c6e66;
+  --turq-wash: rgb(25 181 168 / 0.14);
+
+  /* type */
+  --font-display: 'Philosopher', 'Philosopher Fallback', Georgia, serif;
+  --font-sans: 'Source Sans 3', 'Source Sans 3 Fallback', 'Segoe UI', Arial, sans-serif;
+  --font-script: 'Imperial Script', 'Snell Roundhand', 'Brush Script MT', cursive;
+
+  /* the reference's scale, set in Philosopher */
+  --fs-h1: clamp(5.5rem, 2.2rem + 11vw, 13.75rem); /* chapter openers */
+  --fs-h2: clamp(4.25rem, 2.6rem + 5vw, 8.75rem);
+  --fs-h3: clamp(2.6rem, 2.2rem + 1.1vw, 4rem);
+  --fs-h4: 2rem;
+  --fs-h5: 1.5rem;
+  --fs-h6: 1.125rem;
+  --fs-narrative: clamp(2.1rem, 1.5rem + 1.5vw, 2.75rem); /* feature titles with a script initial */
+  --fs-narrative-2: clamp(1.45rem, 1.2rem + 0.7vw, 1.75rem);
+  --fs-body: 1.0625rem;
+  --fs-small: 0.875rem;
+  --fs-tiny: 0.75rem;
+  --fs-script: clamp(6rem, 4.7rem + 2.6vw, 7.5rem);
+
+  /* layout */
+  --gutter: clamp(16px, 2.6vw, 40px);
+  --page-max: 1600px;
+  --header-h: 60px;
+  --side-w: max(20%, 210px); /* the index column on large screens */
+  --radius: 4px;
+
+  /* motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-lines: cubic-bezier(0.34, 0.22, 0.47, 0.84);
+  --ease-loading: cubic-bezier(0.45, 0.28, 0.34, 0.84);
+  --ease-complete: cubic-bezier(0.72, 0.16, 0.19, 0.96);
+  --ease-fade: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --dur-fast: 0.3s;
+}

@@ -1,0 +1,190 @@
+---
+// The end of the page, on the studio's deep turquoise: the invitation, the four ways to reach the studio, the name
+// set as large as the page allows, and the small print (privacy, credits).
+import { company } from '../content/site';
+const c = company.contact;
+const wa = `https://wa.me/${c.whatsapp}?text=${encodeURIComponent('Hello Raphael Studios, I would like to talk about a project.')}`;
+const year = new Date().getFullYear();
+---
+
+<footer class="foot" id="contact" aria-labelledby="contact-title">
+  <div class="foot__inner">
+    <h2 class="foot__title" id="contact-title" data-reveal="lines">
+      Let’s make something people <em>keep</em>.
+    </h2>
+    <a class="foot__cta" href={wa} target="_blank" rel="noopener" data-cursor="WhatsApp">
+      <span>Message the studio on WhatsApp</span>
+      <span class="foot__cta-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </span>
+    </a>
+    <div class="foot__grid">
+      <div>
+        <p class="foot__label">{c.person}, {c.role}</p>
+        <p class="foot__big"><a href={`mailto:${c.email}`}>{c.email}</a></p>
+      </div>
+      <div>
+        <p class="foot__label">Mobile and WhatsApp</p>
+        <p class="foot__big"><a href={c.mobileHref}>{c.mobile}</a></p>
+      </div>
+      <div>
+        <p class="foot__label">Office</p>
+        <p class="foot__big"><a href={c.officeHref}>{c.office}</a></p>
+      </div>
+      <div>
+        <p class="foot__label">Studio</p>
+        <p class="foot__big"><a href={c.mapsHref} target="_blank" rel="noopener">{c.address[0]}<br />{c.address[1]}</a></p>
+      </div>
+    </div>
+    <p class="foot__word" aria-hidden="true">
+      <span class="foot__word-a">Raphael</span>
+      <span class="foot__word-b">Studios</span>
+      <span class="foot__word-script">Creative Hub</span>
+    </p>
+    <div class="foot__small">
+      <p>© {year} {company.name} {company.descriptor} · {company.city}, since {company.founded}</p>
+      <p>
+        <a href="/privacy/">Privacy</a>
+        <span aria-hidden="true">·</span>
+        <a href="/credits/">Credits &amp; licences</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    position: relative;
+    background: #0b3a36;
+    color: #f2efe6;
+    padding: clamp(110px, 16vw, 220px) 0 28px;
+    overflow: clip;
+  }
+  /* the turquoise runs edge to edge; on a computer the words start after the index column */
+  .foot__inner {
+    padding: 0 var(--gutter);
+  }
+  @media (min-width: 940px) {
+    .foot__inner {
+      padding-left: var(--side-w);
+    }
+  }
+  .foot__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 1.4rem + 4.4vw, 6.6rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    max-width: 11em;
+    margin-bottom: clamp(36px, 5vw, 64px);
+  }
+  .foot__title em {
+    font-family: var(--font-script);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.25em;
+    line-height: 0.5;
+    color: var(--turq-bright);
+    padding: 0 0.04em;
+  }
+  .foot__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    padding: 10px 10px 10px 26px;
+    border-radius: 999px;
+    background: #f2efe6;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: background-color 0.35s var(--ease-out);
+  }
+  .foot__cta:hover {
+    background: var(--turq-bright);
+  }
+  .foot__cta-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: #f2efe6;
+    transition: transform 0.45s var(--ease-out);
+  }
+  .foot__cta-icon svg {
+    width: 20px;
+  }
+  .foot__cta:hover .foot__cta-icon {
+    transform: rotate(45deg);
+  }
+  .foot__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px 40px;
+    margin-top: clamp(70px, 9vw, 120px);
+    padding-top: 28px;
+    border-top: 1px solid rgb(242 239 230 / 0.2);
+  }
+  .foot__label {
+    margin-bottom: 8px;
+    font-size: var(--fs-tiny);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(242 239 230 / 0.62);
+  }
+  .foot__big {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 1rem + 0.8vw, 1.7rem);
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+  .foot__big a:hover {
+    color: var(--turq-bright);
+  }
+  /* the name, as large as the column allows */
+  .foot__word {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.2em;
+    margin: clamp(90px, 12vw, 170px) 0 clamp(24px, 3vw, 40px);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3.6rem, 13vw, 15rem);
+    line-height: 0.85;
+    letter-spacing: -0.045em;
+    color: #f2efe6;
+  }
+  .foot__word-script {
+    position: absolute;
+    right: 0.04em;
+    bottom: -0.32em;
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: 0.42em;
+    letter-spacing: 0;
+    color: var(--turq-bright);
+    transform: rotate(-4deg);
+  }
+  .foot__small {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px 24px;
+    padding-top: 22px;
+    border-top: 1px solid rgb(242 239 230 / 0.2);
+    font-size: var(--fs-small);
+    color: rgb(242 239 230 / 0.72);
+  }
+  .foot__small a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .foot__small a:hover {
+    color: var(--turq-bright);
+  }
+</style>

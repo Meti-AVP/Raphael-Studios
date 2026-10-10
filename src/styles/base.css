@@ -1,0 +1,308 @@
+/* Reset, page defaults and the few global helpers every section uses. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--black);
+  color-scheme: dark;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--black);
+  color: var(--light);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ul,
+ol,
+dl,
+dd {
+  margin: 0;
+}
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+::selection {
+  background: var(--turq);
+  color: var(--black);
+}
+:focus-visible {
+  outline: 2px solid var(--turq);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--light);
+  color: var(--ink);
+  font-weight: 600;
+  transform: translateY(-160%);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* the type voices */
+.headline-1,
+.headline-2,
+.headline-3,
+.headline-4,
+.headline-5,
+.headline-6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-wrap: pretty;
+}
+.headline-1 {
+  font-size: var(--fs-h1);
+}
+.headline-2 {
+  font-size: var(--fs-h2);
+}
+.headline-3 {
+  font-size: var(--fs-h3);
+  letter-spacing: -0.02em;
+}
+.headline-4 {
+  font-size: var(--fs-h4);
+  line-height: 0.95;
+}
+.headline-5 {
+  font-size: var(--fs-h5);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.headline-6 {
+  font-size: var(--fs-h6);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.narrative {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-narrative);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-wrap: pretty;
+}
+.narrative-2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--fs-narrative-2);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+/* the script initial (the reference's drop cap): a large Imperial Script capital that hangs into the margin */
+.drop-cap::first-letter {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: var(--fs-script);
+  line-height: 0;
+  letter-spacing: -0.02em;
+}
+.drop-cap {
+  text-indent: -0.42em;
+}
+.label {
+  font-family: var(--font-sans);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+.body-copy {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.32;
+  font-weight: 400;
+}
+
+/* the little pill link under each feature ("See the work ↗") */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.45em 0.7em 0.42em;
+  border-radius: 6px;
+  background: rgb(255 255 255 / 0.55);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-size: var(--fs-tiny);
+  font-weight: 700;
+  color: var(--ink);
+  transition: background-color var(--dur-fast), color var(--dur-fast);
+}
+.pill:hover,
+.pill:focus-visible {
+  background: var(--ink);
+  color: var(--light);
+}
+
+/* custom cursor (mouse only): a dot that becomes a labelled pill */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 90;
+  pointer-events: none;
+  display: none;
+  mix-blend-mode: normal;
+}
+html.has-cursor .cursor {
+  display: block;
+}
+.cursor__dot {
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--turq);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: transform 0.45s var(--ease-out), opacity 0.3s, background-color 0.3s;
+}
+.cursor.is-visible .cursor__dot {
+  opacity: 1;
+  transform: none;
+}
+.cursor.is-link .cursor__dot {
+  transform: scale(2.6);
+  background: rgb(25 181 168 / 0.4);
+}
+.cursor.is-down .cursor__dot {
+  transform: scale(0.7);
+}
+.cursor__label {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  padding: 7px 12px 7px 10px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--light);
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  transform: scale(0.6);
+  transform-origin: 0 0;
+  transition: transform 0.45s var(--ease-out), opacity 0.25s;
+}
+.cursor.is-visible.is-label .cursor__label {
+  opacity: 1;
+  transform: none;
+}
+.cursor.is-label .cursor__dot {
+  transform: scale(0.8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* the scene stills are rendered with nothing over the painting (dev only, ?poster) */
+html.poster-mode .sal,
+html.poster-mode .bar,
+html.poster-mode main,
+html.poster-mode .cursor {
+  visibility: hidden !important;
+}
+
+/* a picture that steps out of its frame (DepthCard) may reach past the screen's edge on a phone: every section of the
+   page clips what goes beyond its sides (clip, not hidden: no scroll container, sticky parts keep working) */
+main > section,
+main > footer {
+  overflow-x: clip;
+}

@@ -1,0 +1,91 @@
+---
+// The rest of a chapter's pictures: a draggable strip of cards with captions (the picture's own description).
+import Media from './Media.astro';
+import { media } from '../content/media';
+
+interface Props {
+  ids: string[];
+  chapter: string;
+}
+const { ids, chapter } = Astro.props;
+---
+
+<div class="works" data-module="strip" aria-label="More work">
+  <ul class="works__track" role="list" data-strip-track>
+    {
+      ids.map((id) => {
+        const m = media(id);
+        const ratio = m.width / m.height;
+        return (
+          <li class="works__item" style={`--r:${ratio.toFixed(3)}`}>
+            <figure class="works__card">
+              <div class="works__img">
+                <Media id={id} sizes="(min-width: 940px) 30vw, 70vw" decorative />
+              </div>
+              <figcaption class="works__cap">{m.alt}</figcaption>
+            </figure>
+          </li>
+        );
+      })
+    }
+  </ul>
+  <p class="works__hint label" aria-hidden="true">Drag <span>→</span></p>
+</div>
+
+<style>
+  .works {
+    position: relative;
+    margin: 0 calc(var(--gutter) * -1) clamp(80px, 10vw, 140px);
+    overflow: clip;
+    max-width: 100vw;
+  }
+  .works__track {
+    display: flex;
+    gap: 16px;
+    padding: 0 var(--gutter);
+    margin: 0;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+    will-change: transform;
+  }
+  .works__item {
+    flex: 0 0 auto;
+    height: clamp(260px, 34vw, 440px);
+    aspect-ratio: var(--r);
+    max-width: 78vw;
+  }
+  .works__card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .works__img {
+    flex: 1;
+    min-height: 0;
+    overflow: clip;
+    border-radius: var(--radius);
+    background: var(--paper-2);
+  }
+  .works__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .works__cap {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    color: var(--ink-2);
+    max-width: 30em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .works__hint {
+    margin: 14px var(--gutter) 0;
+    color: var(--ink-2);
+  }
+</style>

@@ -1,0 +1,154 @@
+---
+// Everything the studio makes, one card per chapter, at the end of the page: after "the other products" on
+// Agrumea's site (agua, a reference of the brief), whose cards fill with falling fruit when the pointer is over them.
+// Here the cards hold each chapter's statue (a piece of its painted scene, tools/shelf.mjs) and, under the pointer,
+// the letters of the chapter's name fall into them and pile up (modules/shelf.ts). Drag the shelf sideways; a card
+// takes you to its chapter.
+import { chapters } from '../content/edition';
+
+const tints: Record<string, string> = {
+  solutions: '#e6dccb',
+  gifts: '#f0d8c6',
+  packaging: '#d6ebe8',
+  uniform: '#dce6e0',
+  production: '#ebe1cc',
+  giveaways: '#efe0c0',
+  pos: '#e6dbcd',
+  identity: '#dfe6ee',
+  communication: '#d9dfed',
+  visualization: '#e7ebe3',
+  outdoor: '#e2e8d3',
+  events: '#eddcd6',
+  photography: '#e4ddd2',
+};
+---
+
+<section class="shelf" data-module="shelf" aria-labelledby="shelf-title">
+  <h3 class="shelf__title" id="shelf-title">Everything<br />we make</h3>
+  <div class="shelf__track" data-shelf-track data-lenis-prevent-horizontal>
+    {
+      chapters.map((c) => (
+        <a class="shelf__card" href={`#${c.id}`} style={`--bg:${tints[c.id] ?? '#e6dfd2'}`} data-cursor="Discover" data-shelf-card data-word={c.name}>
+          <span class="shelf__fall" aria-hidden="true" data-shelf-fall />
+          <span class="shelf__pic">
+            <img src={`/shelf/${c.id}.webp`} alt="" width="600" height="760" loading="lazy" decoding="async" draggable="false" />
+          </span>
+          <span class="shelf__meta">
+            <span class="shelf__num">{c.numeral}</span>
+            <span class="shelf__name">{c.name}</span>
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .shelf {
+    margin: 0 0 clamp(80px, 10vw, 150px);
+  }
+  .shelf__title {
+    padding: 0 var(--paper-pad);
+    margin-bottom: clamp(28px, 4vw, 56px);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3rem, 1rem + 8vw, 10rem);
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--turq-deep);
+  }
+  .shelf__track {
+    display: flex;
+    gap: 12px;
+    padding: 0 var(--paper-pad) 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+  }
+  .shelf__track::-webkit-scrollbar {
+    display: none;
+  }
+  .shelf__track.is-dragging {
+    cursor: grabbing;
+  }
+  .shelf__track.is-dragging .shelf__card {
+    pointer-events: none;
+  }
+  .shelf__card {
+    position: relative;
+    flex: 0 0 auto;
+    width: clamp(220px, 23vw, 340px);
+    aspect-ratio: 0.78;
+    border-radius: 15px;
+    background: var(--bg);
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 14px;
+    color: var(--ink);
+    isolation: isolate;
+  }
+  .shelf__pic {
+    position: relative;
+    z-index: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: transform 0.7s var(--ease-out);
+  }
+  .shelf__pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+  .shelf__card:hover .shelf__pic,
+  .shelf__card:focus-visible .shelf__pic {
+    transform: scale(0.94);
+  }
+  .shelf__meta {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 12px 2px 0;
+  }
+  .shelf__num {
+    font-family: var(--font-display);
+    color: #095a53; /* the deep turquoise a shade darker: 4.5:1 on the lightest card */
+    font-size: 0.95rem;
+  }
+  .shelf__name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 1rem + 0.8vw, 1.8rem);
+    letter-spacing: -0.02em;
+  }
+  /* the letters that fall (shelf.ts): over the picture, inside the card */
+  .shelf__fall {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .shelf__fall :global(.shelf__letter) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--turq-deep);
+    text-shadow: 0 6px 18px rgb(40 40 28 / 0.25);
+    will-change: transform;
+    transition: opacity 0.4s;
+  }
+  .shelf__fall :global(.shelf__letter.is-out) {
+    opacity: 0;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+// A feature on the paper: a narrative title with a script initial, a label, the text, a way to ask for it, and the
+// work (or an interactive piece) beside it.
+import type { Feature } from '../content/edition';
+import Media from './Media.astro';
+import DepthCard from './DepthCard.astro';
+import { media } from '../content/media';
+import TeeStudio from './TeeStudio.astro';
+import BoxStudio from './BoxStudio.astro';
+import BoothStudio from './BoothStudio.astro';
+import VizStudio from './VizStudio.astro';
+import RainStudio from './RainStudio.astro';
+
+interface Props {
+  feature: Feature;
+  chapter: string;
+  flip?: boolean;
+  cta: string;
+}
+const { feature: f, chapter, flip = false, cta } = Astro.props;
+const [main, ...rest] = f.media;
+// the interactive pieces that take the pictures' place (each loads its own code when it comes near)
+const studios = { tee: TeeStudio, box: BoxStudio, polaroids: BoothStudio, viz: VizStudio, rain: RainStudio } as const;
+const Studio = f.interactive && f.interactive in studios ? studios[f.interactive as keyof typeof studios] : null;
+---
+
+<article class:list={['feature', { 'feature--flip': flip, 'feature--interactive': !!f.interactive }]} data-feature={chapter} id={f.interactive === 'tee' ? 'atelier' : undefined}>
+  <div class="feature__text">
+    <h3 class="feature__title narrative drop-cap" data-reveal="fade">{f.title}</h3>
+    <p class="feature__label label" data-reveal="fade">{f.label}</p>
+    <p class="feature__body body-copy" data-reveal="fade">{f.text}</p>
+    <a class="pill" href={cta} target="_blank" rel="noopener" data-cursor="WhatsApp">Ask about this <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="feature__visual">
+    {Studio && <Studio />}
+    {
+      main &&
+        !Studio &&
+        (media(main).subject ? (
+          <DepthCard id={main} ratio="16 / 11" sizes="(min-width: 940px) 46vw, 92vw" />
+        ) : (
+          <figure class="feature__main card" data-reveal="image">
+            <Media id={main} sizes="(min-width: 940px) 46vw, 92vw" />
+          </figure>
+        ))
+    }
+    {
+      rest.length > 0 && !Studio && (
+        <div class="feature__rest">
+          {rest.map((id) =>
+            media(id).subject ? (
+              <DepthCard id={id} ratio="4 / 5" sizes="(min-width: 940px) 22vw, 45vw" />
+            ) : (
+              <figure class="card" data-reveal="image">
+                <Media id={id} sizes="(min-width: 940px) 22vw, 45vw" />
+              </figure>
+            ),
+          )}
+        </div>
+      )
+    }
+  </div>
+</article>

@@ -1,0 +1,179 @@
+---
+// The visualization studio: "drawn, then rendered". A line you move splits the kiosk the 3D team designed (and
+// that wears your brand) into its blueprint and its render (scripts/viz). Before the 3D is ready, and where it
+// cannot run, the same line splits one of the studio's real renders from its drawing.
+import { getImage } from 'astro:assets';
+import Media from './Media.astro';
+import { media, file } from '../content/media';
+
+const m = media('viz-night-wall');
+const lines = await getImage({ src: file(m.lines!), width: 960, format: 'webp', quality: 80 });
+const colours = [
+  { name: 'Raphael turquoise', hex: '#19b5a8' },
+  { name: 'Ink', hex: '#2b2b25' },
+  { name: 'Brick', hex: '#9e3328' },
+  { name: 'Navy', hex: '#1f2a44' },
+  { name: 'Sage', hex: '#7c8f6b' },
+  { name: 'Sand', hex: '#cdb88f' },
+];
+---
+
+<div class="studio viz" data-module="viz" style="--split: 42%">
+  <div class="studio__stage viz__stage">
+    <div class="viz__grid" aria-hidden="true"></div>
+    <div class="viz__photo" aria-hidden="true">
+      <Media id="viz-night-wall" sizes="(min-width: 940px) 46vw, 92vw" decorative />
+      <div class="viz__drawing"><img src={lines.src} alt="" width="960" height="960" loading="lazy" decoding="async" /></div>
+    </div>
+    <canvas
+      class="studio__canvas viz__canvas"
+      role="img"
+      aria-label="A branded pop-up kiosk in 3D, split by a movable line: its technical drawing on the left, its photo-real render on the right. Drag around it to turn it."
+      data-cursor="Turn"></canvas>
+    <div class="viz__line" aria-hidden="true"></div>
+    <div
+      class="viz__handle"
+      role="slider"
+      tabindex="0"
+      aria-label="From the drawing to the render"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="42"
+      aria-valuetext="42% drawn"
+      data-viz-handle
+      data-cursor="Slide">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </div>
+    <p class="viz__tag viz__tag--l label" aria-hidden="true">Drawn</p>
+    <p class="viz__tag viz__tag--r label" aria-hidden="true">Rendered</p>
+    <p class="studio__hint label" data-viz-hint aria-hidden="true">Slide the line · drag around to turn</p>
+  </div>
+
+  <form class="studio__panel" data-viz-form onsubmit="return false">
+    <fieldset class="studio__group">
+      <legend class="label">Your brand on the kiosk</legend>
+      <div class="studio__row">
+        <input class="studio__text" type="text" name="text" maxlength="24" placeholder="Your brand" value="Raphael Studios" autocomplete="organization" />
+      </div>
+    </fieldset>
+    <fieldset class="studio__group">
+      <legend class="label">Its colour</legend>
+      <div class="studio__swatches" role="radiogroup" aria-label="Brand colour">
+        {
+          colours.map((c, i) => (
+            <label class="studio__swatch" style={`--c:${c.hex}`} title={c.name}>
+              <input type="radio" name="colour" value={c.hex} checked={i === 0} />
+              <span class="sr-only">{c.name}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+    <div class="studio__actions">
+      <button class="studio__main" type="button" data-viz-sweep>Render it</button>
+      <a class="pill" href="#" target="_blank" rel="noopener" data-viz-order>Ask for a 3D visualization ↗</a>
+    </div>
+  </form>
+</div>
+
+<style>
+  /* the drawing's paper: a blueprint grid, left of the line */
+  .viz__grid {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgb(201 244 238 / 0.08) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(90deg, rgb(201 244 238 / 0.08) 1px, transparent 1px) 0 0 / 24px 24px,
+      linear-gradient(rgb(201 244 238 / 0.16) 1px, transparent 1px) 0 0 / 120px 120px,
+      linear-gradient(90deg, rgb(201 244 238 / 0.16) 1px, transparent 1px) 0 0 / 120px 120px,
+      #0b3b37;
+    clip-path: inset(0 calc(100% - var(--split)) 0 0);
+  }
+  .viz__photo {
+    position: absolute;
+    inset: 0;
+    transition: opacity 0.8s var(--ease-out);
+  }
+  .viz__photo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .viz__drawing {
+    position: absolute;
+    inset: 0;
+    background: #0b3b37;
+    clip-path: inset(0 calc(100% - var(--split)) 0 0);
+  }
+  .viz.is-ready .viz__photo {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .viz__line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--split);
+    width: 2px;
+    translate: -1px 0;
+    background: #3ee0d1;
+    box-shadow: 0 0 12px rgb(62 224 209 / 0.7);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .viz__handle {
+    position: absolute;
+    top: 50%;
+    left: var(--split);
+    width: 44px;
+    height: 44px;
+    translate: -50% -50%;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #f7f5ee;
+    color: var(--ink);
+    box-shadow:
+      0 0 0 2px #3ee0d1,
+      0 6px 16px rgb(0 0 0 / 0.25);
+    cursor: ew-resize;
+    touch-action: none;
+    z-index: 3;
+    transition: transform 0.2s var(--ease-out);
+  }
+  .viz__handle:hover,
+  .viz__handle:focus-visible {
+    transform: scale(1.08);
+    outline: none;
+  }
+  .viz__handle svg {
+    width: 22px;
+  }
+  .viz__tag {
+    position: absolute;
+    top: 12px;
+    z-index: 2;
+    padding: 4px 9px;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+  .viz__tag--l {
+    left: 12px;
+    color: #c9f4ee;
+    background: rgb(11 59 55 / 0.7);
+  }
+  .viz__tag--r {
+    right: 12px;
+    color: var(--ink);
+    background: rgb(247 245 238 / 0.8);
+  }
+  .viz .studio__hint {
+    left: auto;
+    right: 14px;
+    z-index: 2;
+  }
+  /* the line works before (and without) the 3D */
+  .viz.is-live .studio__hint {
+    opacity: 1;
+  }
+</style>

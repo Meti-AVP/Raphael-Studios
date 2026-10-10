@@ -1,0 +1,53 @@
+---
+// A chapter's opening statement on the paper: one large sentence with small pictures of the work set inside it,
+// the words and the pictures arriving one after another as it comes into view.
+import Media from './Media.astro';
+import { visible } from '../content/policy';
+
+interface Props {
+  parts: (string | { m: string })[];
+}
+const { parts } = Astro.props;
+// work that may not be shown (content/policy.ts) leaves its place in the sentence
+const shown = parts.filter((p) => typeof p === 'string' || visible(p.m));
+let i = 0;
+type Item = { space: true } | { word: string; i: number } | { pic: string; i: number; tail?: { word: string; i: number } };
+const items: Item[] = [];
+for (const p of shown) {
+  if (typeof p !== 'string') {
+    items.push({ pic: p.m, i: i++ });
+    continue;
+  }
+  for (const w of p.split(/(\s+)/).filter(Boolean)) {
+    const last = items[items.length - 1];
+    // punctuation right after a picture stays with it
+    if (last && 'pic' in last && !last.tail && /^[,.;:!?]/.test(w)) last.tail = { word: w, i: i++ };
+    else items.push(/^\s+$/.test(w) ? { space: true } : { word: w, i: i++ });
+  }
+}
+---
+
+<p class="statement" data-reveal="statement">
+  {
+    items.map((it) =>
+      'space' in it ? (
+        ' '
+      ) : 'word' in it ? (
+        <span class="statement__w" style={`--i:${it.i}`}>
+          {it.word}
+        </span>
+      ) : (
+        <span class="statement__nb">
+          <span class="statement__pic" style={`--i:${it.i}`} aria-hidden="true">
+            <Media id={it.pic} sizes="140px" widths={[160, 280]} decorative />
+          </span>
+          {it.tail && (
+            <span class="statement__w" style={`--i:${it.tail.i}`}>
+              {it.tail.word}
+            </span>
+          )}
+        </span>
+      ),
+    )
+  }
+</p>

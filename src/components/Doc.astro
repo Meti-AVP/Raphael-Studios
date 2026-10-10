@@ -1,0 +1,75 @@
+---
+// A plain page of text (privacy, credits): the studio's mark, the title, the content, the way back.
+interface Props {
+  title: string;
+  updated: string;
+}
+const { title, updated } = Astro.props;
+---
+
+<article class="doc">
+  <a class="doc__back pill" href="/">← Raphael Studios</a>
+  <h1 class="doc__title">{title}</h1>
+  <p class="doc__date label">Last updated {updated}</p>
+  <div class="doc__body">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .doc {
+    min-height: 100svh;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px var(--gutter) 120px;
+    color: var(--ink);
+  }
+  :global(body:has(.doc)) {
+    background: var(--paper);
+  }
+  .doc__back {
+    margin-bottom: clamp(50px, 8vw, 100px);
+  }
+  .doc__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.6rem, 1.6rem + 3.6vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+  .doc__date {
+    color: var(--ink-2);
+    margin-bottom: clamp(36px, 5vw, 60px);
+  }
+  .doc__body :global(h2) {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin: 44px 0 12px;
+  }
+  .doc__body :global(p),
+  .doc__body :global(li) {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--ink-2);
+    margin-bottom: 12px;
+  }
+  .doc__body :global(ul) {
+    padding-left: 1.2em;
+  }
+  .doc__body :global(a) {
+    color: var(--turq-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .doc__body :global(pre) {
+    white-space: pre-wrap;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    padding: 18px;
+    border-radius: 12px;
+    background: var(--paper-2);
+    color: var(--ink-2);
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+// One chapter of the story: an opener over its painted scene (the huge title, a line with a script initial), then
+// the paper with the work. The paper itself is painted by the stage (with torn edges); here it is a transparent
+// box that tells the stage where it is (data-paper), and becomes a plain cream box when there is no stage.
+import type { EditionChapter } from '../content/edition';
+import Statement from './Statement.astro';
+import Exhibit from './Exhibit.astro';
+import Gallery from './Gallery.astro';
+import Offer from './Offer.astro';
+import Tumbler from './Tumbler.astro';
+import Showroom from './Showroom.astro';
+import { collections } from '../content/showroom';
+import { visible } from '../content/policy';
+import { company } from '../content/site';
+
+interface Props {
+  chapter: EditionChapter;
+  index: number;
+}
+const { chapter: c, index } = Astro.props;
+// the pictures an exhibit shows large stay out of the gallery; a studio stands in for its pictures, so they go there
+const studio = (f: (typeof c.features)[number]) => !!f.interactive && f.interactive !== 'billboard';
+const large = new Set(c.features.filter((f) => !studio(f)).map((f) => f.media.find(visible)));
+const all = [...new Set([...c.features.flatMap((f) => f.media), ...c.works])];
+const galleryIds = all.filter((id) => !large.has(id));
+// a showroom (the real pieces in 3D) takes the chapter's studio inside it: "Make yours" opens it
+const room = collections[c.id];
+const inRoom = (f: (typeof c.features)[number]) => !!room && f.interactive === room.studio;
+const wa = (topic: string) =>
+  `https://wa.me/${company.contact.whatsapp}?text=${encodeURIComponent(`Hello Raphael Studios, I would like to talk about ${topic}.`)}`;
+---
+
+<section class="chapter" id={c.id} data-section-id={c.id} data-scene={c.scene} aria-labelledby={`${c.id}-title`} data-index={index}>
+  <div class="chapter__opener" data-section-opener>
+    <h2 class="chapter__title headline-1" id={`${c.id}-title`} style={`--len:${c.name.length}`}>
+      <span class="sr-only">{c.numeral}. </span>
+      <span class="chapter__title-text" data-reveal="title">{c.name}</span>
+    </h2>
+    <p class="chapter__lead narrative drop-cap" data-reveal="fade">{c.lead}</p>
+    {
+      c.id === 'outdoor' && (
+        <form class="hill" data-module="billboard" onsubmit="return false" data-reveal="fade">
+          <label class="hill__label label" for="hill-name">
+            Put your brand on the hill
+          </label>
+          <input id="hill-name" class="hill__input" type="text" maxlength="26" placeholder="Your brand" autocomplete="organization" spellcheck="false" />
+          <canvas class="hill__preview" width="480" height="518" aria-hidden="true" />
+        </form>
+      )
+    }
+  </div>
+
+  <div class="paper" data-paper>
+    <div class="paper__inner">
+      <p class="paper__kicker label"><span class="paper__num">{c.numeral}</span> {c.full}</p>
+      {c.id === 'gifts' && <Tumbler />}
+      <Statement parts={c.statement} />
+      {
+        room && (
+          <Showroom id={c.id}>
+            {c.features.filter(inRoom).map((f) => <Exhibit feature={f} chapter={c.id} cta={wa(c.full.toLowerCase())} />)}
+          </Showroom>
+        )
+      }
+      {c.features.filter((f) => !inRoom(f)).map((f) => <Exhibit feature={f} chapter={c.id} cta={wa(c.full.toLowerCase())} />)}
+      <Gallery ids={galleryIds} />
+      <Offer chapter={c} pictures={all} />
+    </div>
+  </div>
+</section>

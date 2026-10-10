@@ -1,0 +1,130 @@
+---
+// A photo whose subject was cut out (tools/content): on hover the card tilts, the background slides one way and the
+// person steps forward, out of the top of the frame. On touch screens the person steps out once the card is well
+// in view. A photo without a cut-out is a plain card.
+import Media from './Media.astro';
+import { media } from '../content/media';
+
+interface Props {
+  id: string;
+  sizes: string;
+  /** the frame's aspect (the picture is cropped to it, the cut-out with it) */
+  ratio: string;
+  class?: string;
+  reveal?: boolean;
+}
+
+const { id, sizes, ratio, class: className, reveal = true } = Astro.props;
+const m = media(id);
+const cut = !!m.subject;
+// cropped to the frame round the person (a little above their middle, to keep the head), not round the photo's centre
+const [l, t, r, b] = m.subject?.bbox ?? [0, 0, 1, 1];
+const focus = `${(((l + r) / 2) * 100).toFixed(1)}% ${((t + (b - t) * 0.35) * 100).toFixed(1)}%`;
+---
+
+<figure
+  class:list={['depth', className, { 'depth--flat': !cut }]}
+  data-module={cut ? 'depth' : undefined}
+  data-reveal={reveal ? 'image' : undefined}
+  style={`--ratio:${ratio};--c1:${m.top};--c2:${m.bottom};--focus:${focus}`}>
+  <div class="depth__card">
+    <div class="depth__frame">
+      {cut ? <Media id={id} layer="plate" sizes={sizes} class="depth__plate" alt={m.alt} /> : <Media id={id} sizes={sizes} class="depth__plate" />}
+      <span class="depth__shine" aria-hidden="true"></span>
+    </div>
+    {
+      cut && (
+        <div class="depth__subject" aria-hidden="true">
+          <Media id={id} layer="subject" sizes={sizes} decorative />
+        </div>
+      )
+    }
+  </div>
+</figure>
+
+<style>
+  .depth {
+    --rx: 0deg;
+    --ry: 0deg;
+    --px: 0;
+    --py: 0;
+    --lift: 0;
+    position: relative;
+    margin: 0;
+    perspective: 1400px;
+  }
+  .depth__card {
+    position: relative;
+    aspect-ratio: var(--ratio);
+    transform-style: preserve-3d;
+    transform: rotateX(var(--ry)) rotateY(var(--rx));
+    transition: transform 0.9s var(--ease-out);
+  }
+  .depth.is-active .depth__card {
+    transition-duration: 0.25s;
+  }
+  /* the frame clips the background; the person above it is free */
+  .depth__frame {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    overflow: clip;
+    background: linear-gradient(var(--c1), var(--c2));
+    box-shadow:
+      0 1px 0 rgb(0 0 0 / 0.04),
+      0 18px 40px -24px rgb(40 40 28 / 0.45);
+    transform: translateZ(0);
+  }
+  .depth__frame :global(img),
+  .depth__subject :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--focus, 50% 50%);
+  }
+  .depth__frame :global(.depth__plate) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .depth__frame :global(.depth__plate img) {
+    transform: translate3d(calc(var(--px) * -10px), calc(var(--py) * -8px), 0) scale(1.06);
+    transition: transform 0.9s var(--ease-out);
+  }
+  .depth__subject {
+    position: absolute;
+    inset: 0;
+    /* only the bottom edge is clipped: the head and the hands may leave the frame */
+    clip-path: inset(-40% -20% 0 -20%);
+    transform: translate3d(calc(var(--px) * 12px), 0, 60px);
+    transition: transform 0.9s var(--ease-out);
+    pointer-events: none;
+  }
+  .depth__subject :global(picture) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform-origin: 50% 100%;
+    transform: scale(calc(1 + var(--lift) * 0.075));
+    transition:
+      transform 0.9s var(--ease-out),
+      filter 0.6s;
+  }
+  .depth.is-active .depth__subject :global(picture),
+  .depth.is-popped .depth__subject :global(picture) {
+    filter: drop-shadow(0 22px 26px rgb(0 0 0 / 0.28));
+  }
+  .depth.is-active .depth__subject,
+  .depth.is-active .depth__subject :global(picture),
+  .depth.is-active .depth__frame :global(.depth__plate img) {
+    transition-duration: 0.35s;
+  }
+  .depth__shine {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(60% 50% at calc(50% + var(--px) * 40%) calc(30% + var(--py) * 30%), rgb(255 255 255 / 0.22), transparent 70%);
+    opacity: var(--lift);
+    transition: opacity 0.6s;
+    pointer-events: none;
+  }
+</style>

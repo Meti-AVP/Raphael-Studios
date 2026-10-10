@@ -1,0 +1,88 @@
+---
+// The chapter's services (from the profile's list, p4), set like the reference's update lists: two columns of a bold
+// name and one line about it.
+import type { EditionChapter } from '../content/edition';
+
+interface Props {
+  chapter: EditionChapter;
+}
+const { chapter: c } = Astro.props;
+
+// one line per service, from the profile's chapter texts (p6–p21)
+const notes: Record<string, string> = {
+  'Promotional Gifts': 'Custom gifts that strengthen recognition and engagement.',
+  Packaging: 'Functional, beautiful packaging that presents the product.',
+  Giveaways: 'High-quality promotional products people keep.',
+  'Corporate Uniform': 'Uniforms that reflect the brand: comfortable, durable, professional.',
+  'High-End Customized Sampling': 'One-off samples, refined with you before production.',
+  'Mass Production': 'Large-scale manufacturing with consistent quality, on time.',
+  'POS Materials': 'Displays, signage, wobblers, shelf branding and stands.',
+  'Events and Trophies': 'Event production, and the trophies and awards for it.',
+  'Fashion Brand': 'Collections designed and made for fashion labels.',
+  'Photography Services': 'Products, brands and events, with creative direction.',
+  '3D Creative Ideas': '3D visualizations and mock-ups before anything is built.',
+  'Corporate Identities': 'Visual identities, logo systems and guidelines.',
+  'Corporate Branding': 'One brand, consistent across every touchpoint.',
+  'Creative Concepts & Art Directions': 'The idea and the look, from concept to artwork.',
+  Posters: 'Posters that carry a campaign.',
+  Ads: 'Ads for print, screens and social.',
+  'Full Media Campaigns': 'Campaigns planned across every medium.',
+  'Social Media Campaigns': 'Content and campaigns for social platforms.',
+  'Full Marketing Campaigns': 'From the plan to the last activation.',
+  'Marketing Plan Proposals': 'Plans and proposals that win the brief.',
+  'Outdoor Campaigns': 'High-impact outdoor advertising.',
+  'Proposals and Presentations': 'Proposals and presentations designed to persuade.',
+};
+---
+
+<div class="svc">
+  <h3 class="svc__title headline-5">What we do here</h3>
+  <ul class="svc__list" role="list">
+    {
+      c.services.map((s) => (
+        <li class="svc__item" data-reveal="fade">
+          <p class="svc__name label">{s}</p>
+          <p class="svc__note">{notes[s] ?? ''}</p>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .svc {
+    border-top: 1px solid var(--line-strong);
+    padding-top: 22px;
+  }
+  .svc__title {
+    margin-bottom: 26px;
+    color: var(--ink);
+  }
+  .svc__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px 48px;
+    margin: 0;
+  }
+  @media (min-width: 700px) {
+    .svc__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .svc__item {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+    gap: 16px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .svc__name {
+    color: var(--ink);
+  }
+  .svc__note {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    line-height: 1.15;
+    color: var(--ink-2);
+  }
+</style>

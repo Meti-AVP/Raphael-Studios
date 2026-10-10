@@ -1,0 +1,168 @@
+---
+// The gifts chapter opens with one of the studio's products, the way Agrumea's site (agua, a reference of the brief)
+// opens with its jar: a huge title, the product beneath it; as the reader scrolls, the product rises over the title,
+// leans and turns, its printed wrap going round (modules/tumbler.ts, three.js). Type a brand and the wrap is reprinted
+// with it; drag the tumbler to turn it by hand.
+---
+
+<section class="tumbler" data-module="tumbler" aria-labelledby="tumbler-title">
+  <div class="tumbler__stage" data-tumbler-stage>
+    <h3 class="tumbler__title" id="tumbler-title">
+      <span class="tumbler__line">Made to</span>
+      <span class="tumbler__line">be <em>kept</em></span>
+    </h3>
+    <div class="tumbler__meta" aria-hidden="true">
+      <p>The tumbler<br />Promotional gifts</p>
+      <p>Made in Cairo<br />since 2011</p>
+    </div>
+    <div class="tumbler__jar" data-tumbler-jar>
+      <div class="tumbler__shape" aria-hidden="true"></div>
+      <canvas class="tumbler__canvas" aria-hidden="true" data-cursor="Turn"></canvas>
+    </div>
+  </div>
+  <form class="tumbler__form" onsubmit="return false">
+    <label class="tumbler__label label" for="tumbler-brand">Your brand on it</label>
+    <input id="tumbler-brand" class="tumbler__input" type="text" maxlength="22" placeholder="Your brand" autocomplete="organization" spellcheck="false" data-tumbler-brand />
+    <p class="tumbler__hint" data-tumbler-hint>Type your name · drag the tumbler to turn it</p>
+  </form>
+</section>
+
+<style>
+  .tumbler {
+    position: relative;
+    margin: 0 calc(var(--paper-pad) * -1) clamp(60px, 8vw, 120px);
+    overflow: clip;
+  }
+  .tumbler__stage {
+    --ph: 0;
+    position: relative;
+    height: clamp(620px, 104svh, 980px);
+    display: grid;
+    justify-items: center;
+  }
+  /* the title, very large; it sinks behind the tumbler as the page goes up (--ph: tumbler.ts) */
+  .tumbler__title {
+    position: relative;
+    z-index: 1;
+    margin-top: clamp(20px, 4vw, 60px);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3.8rem, 1rem + 11.4vw, 13.5rem);
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--turq-deep);
+    transform: translate3d(0, calc(var(--ph) * 22svh), 0);
+    will-change: transform;
+    pointer-events: none; /* it sinks over the form below: the clicks go through to it */
+  }
+  .tumbler__line {
+    display: block;
+  }
+  .tumbler__title em {
+    font-family: var(--font-script);
+    font-style: normal;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--ink);
+  }
+  .tumbler__meta {
+    position: absolute;
+    z-index: 1;
+    left: var(--paper-pad);
+    right: var(--paper-pad);
+    top: clamp(240px, 32vw, 470px);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 0.8rem + 0.4vw, 1.25rem);
+    line-height: 1.2;
+    color: var(--ink-2);
+    transform: translate3d(0, calc(var(--ph) * 16svh), 0);
+    pointer-events: none;
+  }
+  .tumbler__meta p:last-child {
+    text-align: right;
+  }
+  /* the tumbler: below the title, rising over it, leaning, a little smaller (as agua's jar) */
+  .tumbler__jar {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: clamp(-90px, -4.5vw, -30px);
+    width: clamp(200px, 22vw, 340px);
+    aspect-ratio: 0.62;
+    transform: translate3d(-50%, calc(var(--ph) * -30svh), 0) rotate(calc(var(--ph) * 14deg)) scale(calc(1 - var(--ph) * 0.14));
+    will-change: transform;
+    touch-action: pan-y;
+  }
+  .tumbler__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-out);
+    cursor: grab;
+  }
+  .tumbler.is-ready .tumbler__canvas {
+    opacity: 1;
+  }
+  .tumbler.is-dragging .tumbler__canvas {
+    cursor: grabbing;
+  }
+  /* before the 3D (or without it): the tumbler's silhouette in the brand's colours */
+  .tumbler__shape {
+    position: absolute;
+    inset: 9% 17% 3%;
+    border-radius: 14% 14% 18% 18% / 6% 6% 9% 9%;
+    background:
+      linear-gradient(90deg, rgb(0 0 0 / 0.28), transparent 30%, rgb(255 255 255 / 0.16) 55%, rgb(0 0 0 / 0.32)),
+      linear-gradient(180deg, #d9dcdc 0 13%, var(--turq-deep) 13% 100%);
+    transition: opacity 0.6s;
+  }
+  .tumbler.is-ready .tumbler__shape {
+    opacity: 0;
+  }
+  .tumbler__form {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: clamp(40px, 6vw, 80px) var(--paper-pad) 0;
+  }
+  .tumbler__label {
+    color: var(--turq-deep);
+  }
+  .tumbler__input {
+    width: min(420px, 90vw);
+    height: 56px;
+    padding: 0 22px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: #fbfaf6;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    text-align: center;
+    color: var(--ink);
+  }
+  .tumbler__input:focus-visible {
+    outline: 2px solid var(--turq);
+    outline-offset: 3px;
+  }
+  .tumbler__hint {
+    font-size: var(--fs-small);
+    color: var(--ink-2);
+  }
+  @media (max-width: 760px) {
+    .tumbler__meta {
+      top: clamp(170px, 52vw, 260px);
+    }
+    .tumbler__jar {
+      width: clamp(170px, 46vw, 250px);
+    }
+  }
+</style>

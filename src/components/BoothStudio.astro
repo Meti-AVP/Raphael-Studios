@@ -1,0 +1,335 @@
+---
+// The events studio: an instant camera on a table, the studio's own event pictures as instant prints that develop
+// and slide around like real ones (scripts/modules/booth). Your event's name goes on the prints; with your
+// permission the camera takes you (the picture stays on your device), and you can take the print home.
+import { getImage } from 'astro:assets';
+import { media, file } from '../content/media';
+
+// the prints the camera hands out, in order (the first three already lie on the table)
+const prints = [
+  { id: 'ev-facepaint-1', caption: 'Superheroes day' },
+  { id: 'ev-90s-1', caption: 'Back to the 90s' },
+  { id: 'ev-team', caption: 'The whole team' },
+  { id: 'ev-facepaint-2', caption: 'Face paint corner' },
+  { id: 'ev-cart', caption: 'Candy floss!' },
+  { id: 'ev-90s-2', caption: 'Windbreaker era' },
+  { id: 'ev-facepaint-3', caption: 'Smile, hero' },
+  { id: 'ev-gift-box', caption: 'A gift for everyone' },
+  { id: 'superheroes', caption: 'Four heroes' },
+];
+const photos = await Promise.all(
+  prints.map(async (p) => {
+    const m = media(p.id);
+    const img = await getImage({ src: file(m.file), width: Math.min(480, m.width), format: 'webp', quality: 74 });
+    return { src: img.src, alt: m.alt, caption: p.caption };
+  }),
+);
+const onTable = [
+  { x: 20, y: 66, r: -9 },
+  { x: 50, y: 74, r: 4 },
+  { x: 80, y: 63, r: 11 },
+];
+---
+
+<div class="studio booth" data-module="booth" data-photos={JSON.stringify(photos.slice(3))}>
+  <div class="studio__stage booth__stage">
+    <div class="booth__table" data-booth-table>
+      {
+        onTable.map((p, i) => (
+          <figure class="polaroid" style={`--x:${p.x}%;--y:${p.y}%;--r:${p.r}deg`} data-cursor="Throw">
+            <div class="polaroid__photo">
+              <img src={photos[i].src} alt={photos[i].alt} width="480" height="480" loading="lazy" decoding="async" draggable="false" />
+            </div>
+            <figcaption class="polaroid__caption" style={`--len:${Math.max(8, photos[i].caption.length)}`}>{photos[i].caption}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <div class="booth__camera" data-booth-camera-body data-cursor="Take a picture" aria-hidden="true">
+      <svg viewBox="0 0 360 250" fill="none">
+        <defs>
+          <linearGradient id="booth-body" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3fcfc2"></stop>
+            <stop offset="0.55" stop-color="#19b5a8"></stop>
+            <stop offset="1" stop-color="#11978c"></stop>
+          </linearGradient>
+          <linearGradient id="booth-top" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f7f5ee"></stop>
+            <stop offset="1" stop-color="#ddd8ca"></stop>
+          </linearGradient>
+          <radialGradient id="booth-glass" cx="0.38" cy="0.34" r="0.75">
+            <stop offset="0" stop-color="#3b5f72"></stop>
+            <stop offset="0.45" stop-color="#14232c"></stop>
+            <stop offset="1" stop-color="#05090c"></stop>
+          </radialGradient>
+          <radialGradient id="booth-flash" cx="0.5" cy="0.5" r="0.7">
+            <stop offset="0" stop-color="#ffffff"></stop>
+            <stop offset="1" stop-color="#d9e9e6"></stop>
+          </radialGradient>
+        </defs>
+        <!-- the body: a cream top with the flash and the viewfinder, the turquoise front with the lens -->
+        <rect x="14" y="20" width="332" height="214" rx="30" fill="url(#booth-body)"></rect>
+        <path d="M44 20h272a30 30 0 0 1 30 30v42H14V50a30 30 0 0 1 30-30z" fill="url(#booth-top)"></path>
+        <rect x="40" y="38" width="78" height="38" rx="7" fill="#26302f"></rect>
+        <rect class="booth__flashwin" x="45" y="43" width="68" height="28" rx="5" fill="url(#booth-flash)"></rect>
+        <rect x="262" y="40" width="54" height="34" rx="7" fill="#26302f"></rect>
+        <rect x="268" y="46" width="42" height="22" rx="4" fill="#3b4a4e"></rect>
+        <path d="M272 50h16" stroke="#6f8a8f" stroke-width="2" stroke-linecap="round"></path>
+        <!-- the stripe, in the studio's turquoise -->
+        <rect x="171" y="92" width="6" height="142" fill="#0c6e66"></rect>
+        <rect x="177" y="92" width="6" height="142" fill="#3ee0d1"></rect>
+        <rect x="183" y="92" width="6" height="142" fill="#f7f5ee"></rect>
+        <!-- the lens -->
+        <circle cx="180" cy="142" r="70" fill="#f1eee5"></circle>
+        <circle cx="180" cy="142" r="63" fill="#1d2526"></circle>
+        <circle cx="180" cy="142" r="55" fill="#2c3637"></circle>
+        <circle cx="180" cy="142" r="46" fill="url(#booth-glass)"></circle>
+        <path d="M152 124a34 34 0 0 1 26-18" stroke="#ffffff" stroke-opacity="0.55" stroke-width="5" stroke-linecap="round"></path>
+        <circle cx="200" cy="164" r="5" fill="#ffffff" fill-opacity="0.18"></circle>
+        <!-- the shutter, the mark, the slot -->
+        <circle class="booth__shutter" cx="60" cy="160" r="17" fill="#f7f5ee"></circle>
+        <circle cx="60" cy="160" r="11" fill="#e9e4d7"></circle>
+        <text x="300" y="190" text-anchor="middle" font-family="Philosopher, Georgia, serif" font-weight="700" font-size="34" fill="#f7f5ee">R</text>
+        <text x="300" y="208" text-anchor="middle" font-family="Philosopher, Georgia, serif" font-weight="700" font-size="9.5" letter-spacing="1.6" fill="#f7f5ee">RAPHAEL</text>
+        <rect x="70" y="226" width="220" height="7" rx="3.5" fill="#073b37"></rect>
+      </svg>
+      <video class="booth__live" playsinline muted></video>
+    </div>
+    <div class="booth__flash" aria-hidden="true"></div>
+    <p class="studio__caption label" data-booth-caption aria-live="polite">The studio's instant camera</p>
+    <p class="studio__hint label" data-booth-hint aria-hidden="true">Throw the prints around · press the camera</p>
+  </div>
+
+  <form class="studio__panel" data-booth-form onsubmit="return false">
+    <fieldset class="studio__group studio__wide">
+      <legend class="label">Your event, printed on every picture</legend>
+      <div class="studio__row">
+        <input class="studio__text" type="text" name="event" maxlength="30" placeholder="Your event" value="" autocomplete="off" />
+      </div>
+    </fieldset>
+    <div class="studio__actions">
+      <button class="studio__main" type="button" data-booth-shoot>Take a picture</button>
+      <button class="studio__second" type="button" data-booth-live>Use my camera</button>
+      <button class="studio__second" type="button" data-booth-save disabled>Take it home</button>
+      <a class="pill" href="#" target="_blank" rel="noopener" data-booth-order>Plan your event ↗</a>
+    </div>
+    <p class="booth__privacy label studio__wide" data-booth-privacy hidden>Your camera stays on your device: nothing is sent anywhere.</p>
+  </form>
+</div>
+
+<style>
+  .booth__stage {
+    touch-action: pan-y;
+  }
+  /* the prints lie on the table, under the camera (the camera sits on the table too) */
+  .booth__table {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  /* an instant print: 88 x 107 mm, the picture 79 mm square */
+  .polaroid {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: clamp(96px, 27%, 210px);
+    aspect-ratio: 88 / 107;
+    margin: 0;
+    padding: 4.5% 4.5% 0;
+    translate: -50% -50%;
+    rotate: var(--r);
+    background:
+      linear-gradient(160deg, rgb(255 255 255 / 0.5), transparent 40%),
+      #f4f1ea;
+    border-radius: 2px;
+    box-shadow:
+      0 1px 1px rgb(40 40 28 / 0.18),
+      0 4px 10px -2px rgb(40 40 28 / 0.22);
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+    container-type: inline-size;
+    transition: box-shadow 0.25s var(--ease-out);
+    will-change: transform;
+  }
+  .polaroid.is-held {
+    cursor: grabbing;
+    box-shadow:
+      0 2px 3px rgb(40 40 28 / 0.12),
+      0 18px 30px -8px rgb(40 40 28 / 0.35);
+  }
+  /* placed by the physics (the transform carries position and turn) */
+  .booth.is-live-physics .polaroid {
+    left: 0;
+    top: 0;
+    translate: none;
+    rotate: none;
+  }
+  .polaroid__photo {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #1c2226;
+  }
+  .polaroid__photo img,
+  .polaroid__photo canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .polaroid__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.1), transparent 45%);
+    pointer-events: none;
+  }
+  .polaroid__caption {
+    display: grid;
+    place-items: center;
+    height: 20%;
+    padding: 0 6%;
+    font-family: var(--font-script);
+    /* handwriting that fills the strip: smaller for a long name */
+    font-size: min(13.5cqw, calc(195cqw / var(--len, 14)));
+    line-height: 1;
+    color: #213a6b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* a fresh print: dark and milky, the picture comes up over a few seconds */
+  .polaroid.is-developing .polaroid__photo img,
+  .polaroid.is-developing .polaroid__photo canvas {
+    animation: develop 9s cubic-bezier(0.3, 0.1, 0.3, 1) both;
+  }
+  .polaroid.is-developing .polaroid__photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(circle at 50% 45%, #5c6b70, #2c383d);
+    animation: develop-veil 9s cubic-bezier(0.3, 0.1, 0.3, 1) both;
+    pointer-events: none;
+  }
+  @keyframes develop {
+    0% {
+      filter: brightness(0.5) saturate(0) contrast(0.6) blur(2px);
+    }
+    35% {
+      filter: brightness(0.75) saturate(0.35) contrast(0.75) hue-rotate(-18deg) blur(0.6px);
+    }
+    100% {
+      filter: none;
+    }
+  }
+  @keyframes develop-veil {
+    0% {
+      opacity: 1;
+    }
+    30% {
+      opacity: 0.75;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .booth__camera {
+    position: absolute;
+    left: 50%;
+    top: -3%;
+    width: 38%;
+    translate: -50% 0;
+    z-index: 3;
+    cursor: pointer;
+    filter: drop-shadow(0 10px 14px rgb(40 40 28 / 0.28));
+    transition: transform 0.15s var(--ease-out);
+  }
+  .booth__camera svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .booth__camera.is-shooting {
+    transform: translateY(1.5%) scale(0.985);
+  }
+  .booth__camera.is-ejecting svg {
+    animation: whirr 0.09s linear infinite;
+  }
+  @keyframes whirr {
+    50% {
+      transform: translate(0.6px, -0.4px);
+    }
+  }
+  .booth__camera.is-shooting .booth__shutter {
+    fill: #3ee0d1;
+  }
+  /* the live picture, in the lens */
+  .booth__live {
+    position: absolute;
+    left: calc(134 / 360 * 100%);
+    top: calc(96 / 250 * 100%);
+    width: calc(92 / 360 * 100%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .booth.is-camera-on .booth__live {
+    opacity: 1;
+  }
+  .booth__flash {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .booth__flash.is-on {
+    animation: flash 0.5s ease-out;
+  }
+  @keyframes flash {
+    0% {
+      opacity: 0;
+    }
+    8% {
+      opacity: 0.92;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .booth .studio__hint,
+  .booth .studio__caption {
+    z-index: 5;
+  }
+  .booth__privacy {
+    color: var(--ink-2);
+  }
+  @media (max-width: 520px) {
+    .polaroid {
+      width: 31%;
+    }
+    .booth__camera {
+      width: 46%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .polaroid.is-developing .polaroid__photo img,
+    .polaroid.is-developing .polaroid__photo canvas,
+    .polaroid.is-developing .polaroid__photo::before,
+    .booth__flash.is-on {
+      animation: none;
+    }
+    .polaroid.is-developing .polaroid__photo::before {
+      opacity: 0;
+    }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+// The painted edition: the hero, thirteen chapters over their painted scenes, the studio, and contact.
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import SideAndLines from '../components/SideAndLines.astro';
+import Chapter from '../components/Chapter.astro';
+import Footer from '../components/Footer.astro';
+import Partners from '../components/Partners.astro';
+import { chapters } from '../content/edition';
+---
+
+<Base>
+  <Fragment slot="fixed">
+    <canvas class="stage" aria-hidden="true"></canvas>
+    <SideAndLines />
+    <Header />
+  </Fragment>
+
+  <section class="hero" data-section-id="hero" data-scene="hero" aria-label="Raphael Studios, Creative Hub">
+    <h1 class="sr-only">Raphael Studios — Creative Hub. An agency for what comes next, Cairo, since 2011.</h1>
+  </section>
+
+  {chapters.map((c, i) => <Chapter chapter={c} index={i + 1} />)}
+
+  <Partners />
+  <Footer />
+</Base>
+
+<style>
+  .stage {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100lvh;
+    z-index: 0;
+    display: block;
+  }
+  :global(html.no-stage) .stage {
+    display: none;
+  }
+  .hero {
+    height: 150svh;
+  }
+  :global(main) {
+    position: relative;
+    z-index: 10;
+  }
+</style>

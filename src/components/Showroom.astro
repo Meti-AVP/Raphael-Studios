@@ -1,0 +1,400 @@
+---
+// A chapter's showroom (content/showroom.ts): the real things the studio made, in 3D, presented as Agrumea's site
+// (agua, a reference of the brief) presents its jars: the thing's name very large, the thing in front of it, turning;
+// its client and how it was made on either side; a bar to go to the next one, which a panel crosses as agua's pages
+// do (modules/showroom.ts). Beside it, the photograph of the real one. "Make yours" opens the chapter's studio (the
+// slot), where anyone can design their own.
+import Media from './Media.astro';
+import { collections } from '../content/showroom';
+import { hide } from '../content/policy';
+import { media } from '../content/media';
+
+interface Props {
+  id: string;
+}
+const c = collections[Astro.props.id];
+const products = c.products.filter((p) => !p.restricted || !hide.includes(p.restricted));
+const first = products[0];
+const hasStudio = Astro.slots.has('default');
+---
+
+<section class="showroom" data-module="showroom" data-showroom={Astro.props.id} aria-label={c.label} style={`--bg:${first.bg};--ink-p:${first.ink}`}>
+  <div class="showroom__stage" data-showroom-stage>
+    <p class="showroom__label label">{c.label}</p>
+    <h3 class="showroom__name" data-showroom-name aria-live="polite">
+      <span class="showroom__line"><span>{first.name[0]}</span></span>
+      <span class="showroom__line"><span>{first.name[1]}</span></span>
+    </h3>
+    <p class="showroom__meta showroom__meta--l"><span class="label">For</span><b data-showroom-client>{first.client}</b></p>
+    <p class="showroom__meta showroom__meta--r"><span class="label">Made</span><span data-showroom-what>{first.what}</span></p>
+    <div class="showroom__object">
+      <div class="showroom__shadow" aria-hidden="true"></div>
+      <canvas class="showroom__canvas" data-cursor="Turn" role="img" aria-label={`${first.short} in 3D: drag to turn it`}></canvas>
+    </div>
+    <figure class="showroom__real">
+      <div class="showroom__photos">
+        {
+          products.map((p, i) => (
+            <div class:list={['showroom__photo', { 'is-on': i === 0 }]} data-showroom-photo={i}>
+              <Media id={p.photo} sizes="240px" alt={media(p.photo).alt} />
+            </div>
+          ))
+        }
+      </div>
+      <figcaption class="label">The real one</figcaption>
+    </figure>
+    <div class="showroom__bottom">
+      <nav class="showroom__nav" aria-label={`${c.label}: the pieces`}>
+        <span class="showroom__pill" aria-hidden="true" data-showroom-pill></span>
+        {
+          products.map((p, i) => (
+            <button type="button" class="showroom__item" aria-pressed={i === 0 ? 'true' : 'false'} data-showroom-item={i}>
+              {p.short}
+            </button>
+          ))
+        }
+      </nav>
+      <div class="showroom__actions">
+        {hasStudio && <button type="button" class="showroom__make" data-showroom-make aria-expanded="false">Make yours</button>}
+        <a class="showroom__ask" href="#" target="_blank" rel="noopener" data-showroom-ask>Ask about this ↗</a>
+      </div>
+    </div>
+    <div class="showroom__wipe" aria-hidden="true" data-showroom-wipe></div>
+  </div>
+  <script type="application/json" data-showroom-data set:html={JSON.stringify(products)} />
+  {
+    hasStudio && (
+      <div class="showroom__studio" data-showroom-studio>
+        <div class="showroom__studio-inner">
+          <slot />
+        </div>
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .showroom {
+    --bg: #ddd6c8;
+    --ink-p: #1c1c1c;
+    position: relative;
+    margin: 0 calc(var(--paper-pad) * -1) clamp(110px, 13vw, 190px);
+  }
+  .showroom__stage {
+    position: relative;
+    height: clamp(640px, 100svh, 980px);
+    overflow: clip;
+    background: var(--bg);
+    transition: background-color 0.01s linear 0.55s;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    justify-items: center;
+    padding: clamp(24px, 3vw, 44px) var(--paper-pad) clamp(20px, 2.6vw, 36px);
+  }
+  .showroom__label {
+    color: var(--ink-p);
+    opacity: 0.8;
+  }
+  /* the name: very large, behind the thing */
+  .showroom__name {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: clamp(70px, 9vw, 130px);
+    z-index: 0;
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3.6rem, 1rem + 11vw, 13rem);
+    line-height: 0.84;
+    letter-spacing: -0.045em;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--ink-p);
+    pointer-events: none;
+  }
+  .showroom__line {
+    display: block;
+    overflow: clip;
+    padding-bottom: 0.04em;
+  }
+  .showroom__line > span {
+    display: inline-block;
+    transition: transform 0.9s var(--ease-out);
+  }
+  .showroom.is-swapping .showroom__line > span {
+    transform: translateY(105%);
+    transition: none;
+  }
+  .showroom__line:nth-child(2) > span {
+    transition-delay: 0.06s;
+  }
+  .showroom__meta {
+    position: absolute;
+    z-index: 2;
+    top: 38%;
+    display: grid;
+    gap: 6px;
+    max-width: min(17em, 22vw);
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 0.8rem + 0.35vw, 1.2rem);
+    line-height: 1.25;
+    color: var(--ink);
+    transition: opacity 0.4s;
+  }
+  .showroom__meta .label {
+    color: var(--ink-p);
+  }
+  .showroom__meta--l {
+    left: var(--paper-pad);
+  }
+  .showroom__meta--r {
+    right: var(--paper-pad);
+    text-align: right;
+  }
+  .showroom.is-swapping .showroom__meta {
+    opacity: 0;
+    transition: none;
+  }
+  /* the thing: in front of the name */
+  .showroom__object {
+    position: relative;
+    z-index: 1;
+    grid-row: 2;
+    width: min(64vw, 760px);
+    height: 100%;
+    min-height: 360px;
+  }
+  .showroom__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    touch-action: pan-y;
+    opacity: 0;
+    transition: opacity 0.7s var(--ease-out);
+  }
+  .showroom.is-ready .showroom__canvas {
+    opacity: 1;
+  }
+  .showroom.is-dragging .showroom__canvas {
+    cursor: grabbing;
+  }
+  .showroom__shadow {
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    width: 46%;
+    height: 7%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(0 0 0 / 0.22), transparent);
+    filter: blur(6px);
+  }
+  /* the real one: its photograph, small, at the right */
+  .showroom__real {
+    position: absolute;
+    z-index: 2;
+    right: var(--paper-pad);
+    bottom: clamp(96px, 11vw, 130px);
+    margin: 0;
+    display: grid;
+    gap: 8px;
+    justify-items: end;
+  }
+  .showroom__photos {
+    position: relative;
+    width: clamp(120px, 12vw, 190px);
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
+    overflow: clip;
+    box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.5);
+    transform: rotate(3deg);
+  }
+  .showroom__photo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .showroom__photo.is-on {
+    opacity: 1;
+  }
+  .showroom__photo :global(picture),
+  .showroom__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .showroom__real figcaption {
+    color: var(--ink-p);
+  }
+  /* the bar (agua's product bar) and the actions */
+  .showroom__bottom {
+    position: relative;
+    z-index: 3;
+    grid-row: 3;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 14px 18px;
+  }
+  .showroom__nav {
+    position: relative;
+    display: flex;
+    padding: 6px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.78);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 10px 60px -20px rgb(0 0 0 / 0.35);
+  }
+  .showroom__pill {
+    position: absolute;
+    top: 6px;
+    left: 0;
+    height: calc(100% - 12px);
+    width: 0;
+    border-radius: 999px;
+    background: var(--ink-p);
+    transition:
+      transform 0.5s var(--ease-out),
+      width 0.5s var(--ease-out),
+      background-color 0.5s;
+  }
+  .showroom__item {
+    position: relative;
+    z-index: 1;
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    white-space: nowrap;
+    color: var(--ink-2);
+    transition: color 0.4s;
+  }
+  .showroom__item[aria-pressed='true'] {
+    color: #fff;
+  }
+  .showroom__item:focus-visible {
+    outline: 2px solid var(--turq);
+    outline-offset: 2px;
+  }
+  .showroom__actions {
+    display: flex;
+    gap: 10px;
+  }
+  .showroom__make,
+  .showroom__ask {
+    display: inline-flex;
+    align-items: center;
+    height: 54px;
+    padding: 0 22px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .showroom__make {
+    background: var(--ink);
+    color: var(--light);
+  }
+  .showroom__make:hover {
+    background: var(--turq-deep);
+  }
+  .showroom__ask {
+    background: rgb(255 255 255 / 0.7);
+    color: var(--ink);
+  }
+  /* the panel that crosses the stage between two pieces (agua: it rises over the page, then lifts away) */
+  .showroom__wipe {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: var(--wipe, #1c1c1c);
+    transform: translateY(101%);
+    pointer-events: none;
+  }
+  .showroom__wipe::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 2px;
+    background: rgb(255 255 255 / 0.4);
+  }
+  .showroom.is-covering .showroom__wipe {
+    transform: translateY(0);
+    transition: transform 0.55s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  .showroom.is-lifting .showroom__wipe {
+    transform: translateY(-101%);
+    transition: transform 0.62s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  /* the studio, opened by "Make yours" */
+  .showroom__studio {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.8s var(--ease-out);
+  }
+  .showroom.is-making .showroom__studio {
+    grid-template-rows: 1fr;
+  }
+  .showroom__studio-inner {
+    overflow: hidden;
+    min-height: 0;
+    padding: 0 var(--paper-pad);
+  }
+  .showroom.is-making .showroom__studio-inner {
+    padding-top: clamp(50px, 6vw, 90px);
+  }
+  @media (max-width: 760px) {
+    .showroom__stage {
+      height: clamp(620px, 96svh, 860px);
+    }
+    .showroom__meta {
+      top: auto;
+      bottom: 150px;
+      max-width: 44vw;
+      font-size: 0.9rem;
+    }
+    .showroom__real {
+      bottom: auto;
+      top: clamp(150px, 40vw, 220px);
+    }
+    .showroom__photos {
+      width: 96px;
+    }
+    .showroom__object {
+      width: 92vw;
+    }
+    /* the bar scrolls sideways when the names are wider than the phone (its ends fade to say so) */
+    .showroom__nav {
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-mask: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+      mask: linear-gradient(90deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+    }
+    .showroom__nav::-webkit-scrollbar {
+      display: none;
+    }
+    .showroom__item {
+      height: 38px;
+      padding: 0 14px;
+      font-size: 0.86rem;
+    }
+    /* (the collection's name would sit under the header there: the piece's own name says enough) */
+    .showroom__label {
+      visibility: hidden;
+    }
+  }
+  html.reduce-motion .showroom__line > span,
+  html.reduce-motion .showroom__wipe {
+    transition: none !important;
+  }
+</style>

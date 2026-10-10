@@ -1,0 +1,81 @@
+---
+// One exhibit of a chapter, shown large: the label and the title, then a wide stage (an interactive studio in its own
+// app window, or the work's main picture), then the words and the way to ask for it.
+import Media from './Media.astro';
+import DepthCard from './DepthCard.astro';
+import TeeStudio from './TeeStudio.astro';
+import BoxStudio from './BoxStudio.astro';
+import BoothStudio from './BoothStudio.astro';
+import VizStudio from './VizStudio.astro';
+import RainStudio from './RainStudio.astro';
+import type { Feature } from '../content/edition';
+import { media } from '../content/media';
+import { visible } from '../content/policy';
+import { caption } from '../content/captions';
+
+interface Props {
+  feature: Feature;
+  chapter: string;
+  cta: string;
+}
+const { feature: f, chapter, cta } = Astro.props;
+// the pieces that take the picture's place, and the name on their window
+const studios = {
+  tee: { C: TeeStudio, name: 'Atelier' },
+  box: { C: BoxStudio, name: 'Packaging studio' },
+  polaroids: { C: BoothStudio, name: 'Photo booth' },
+  viz: { C: VizStudio, name: '3D studio' },
+  rain: { C: RainStudio, name: 'Giveaways' },
+} as const;
+const studio = f.interactive && f.interactive in studios ? studios[f.interactive as keyof typeof studios] : null;
+const main = f.media.find(visible);
+const cap = !studio && main ? caption(main) : null;
+---
+
+<article class:list={['exhibit', { 'exhibit--studio': !!studio }]} data-feature={chapter} id={f.interactive === 'tee' ? 'atelier' : undefined}>
+  <header class="exhibit__head">
+    <p class="exhibit__label label" data-reveal="fade"><span class="exhibit__dot" aria-hidden="true"></span>{f.label}</p>
+    <h3 class="exhibit__title" data-reveal="lines">{f.title}</h3>
+  </header>
+  <div class="exhibit__stage">
+    {
+      studio ? (
+        <div class="appwin">
+          <div class="appwin__bar" aria-hidden="true">
+            <span class="appwin__dots">
+              <i />
+              <i />
+              <i />
+            </span>
+            <span class="appwin__name">Raphael Studios · {studio.name}</span>
+            <span class="appwin__live">Live</span>
+          </div>
+          <div class="appwin__body">
+            <studio.C />
+          </div>
+        </div>
+      ) : main && media(main).subject ? (
+        <DepthCard id={main} ratio="16 / 9" sizes="(min-width: 1300px) 1180px, (min-width: 760px) 88vw, 100vw" class="exhibit__depth" />
+      ) : main ? (
+        <figure class="exhibit__pic" data-reveal="image">
+          <Media id={main} sizes="(min-width: 1300px) 1180px, (min-width: 760px) 88vw, 100vw" />
+        </figure>
+      ) : null
+    }
+  </div>
+  <footer class="exhibit__foot">
+    <div>
+      <p class="exhibit__text" data-reveal="fade">{f.text}</p>
+      {
+        cap && (
+          <p class="exhibit__cap" data-reveal="fade">
+            <b>{cap.client}</b> {cap.text}
+          </p>
+        )
+      }
+    </div>
+    <a class="pill pill--arrow" href={cta} target="_blank" rel="noopener" data-cursor="WhatsApp">
+      Ask about this <span class="pill__icon" aria-hidden="true">↗</span>
+    </a>
+  </footer>
+</article>

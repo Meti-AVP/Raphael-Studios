@@ -1,0 +1,67 @@
+---
+// Who made what on the site, and the licences that come with it.
+import Base from '../layouts/Base.astro';
+import Doc from '../components/Doc.astro';
+import { company } from '../content/site';
+---
+
+<Base title={`Credits & licences — ${company.name}`} description={`The pictures, fonts, paintings and software of the ${company.name} website, and their licences.`}>
+  <Doc title="Credits & licences" updated="October 2026">
+    <h2>The work</h2>
+    <p>
+      The photographs show work {company.name} made for its clients. Brand names and logos belong to their owners and are shown as references of that
+      work. The pieces shown in 3D in the showrooms are replicas of that same work, modelled from its photographs and printed as it was made.
+    </p>
+    <h2>The painted scenes</h2>
+    <p>
+      The animated scenes behind the chapters are adapted, with their creators’ permission, from an existing web experience, and remade for
+      {company.name}: every figure is now a white marble statue in the manner of classical Greek sculpture, carrying the studio’s own products (its
+      bag, its gift card, its pins, its catalogue, its drawings); the drawing of the 3D chapter is a study after the antique; the animal is now a
+      marble Hermes, the messenger, holding up the studio’s box; the shop counter holds the studio’s gift box, with its work framed on the wall;
+      and every background is painted anew as a view of Cairo and Egypt.
+    </p>
+    <p>
+      The opening scene is the studio’s own: a photographer and a model holding the studio’s bag, painted for it, with the studio’s work pouring
+      out of the bag before a night Egypt. The Partners scene sets the founder in an Egyptian temple hall painted for the studio, and the
+      photography chapter is made from Raphael’s portrait of Baldassare Castiglione. Their pictures were raised in depth with Depth Anything V2
+      (Apache License 2.0).
+    </p>
+    <p>
+      The repainting was done with Stable Diffusion XL inpainting (Stability AI and Hugging Face, CreativeML Open RAIL++-M licence), guided by
+      the scenes’ own drawing through a ControlNet (Hugging Face, CreativeML Open RAIL++-M licence), with the SDXL VAE fp16 fix (MIT licence).
+    </p>
+    <h2>Paintings</h2>
+    <ul>
+      <li>Raffaello Sanzio (Raphael), <em>The School of Athens</em>, 1509–1511, Apostolic Palace, Vatican City. Public domain.</li>
+      <li>Raffaello Sanzio (Raphael), <em>Portrait of Baldassare Castiglione</em>, c. 1514–1515, Musée du Louvre. Public domain.</li>
+    </ul>
+    <h2>Fonts</h2>
+    <p>Under the SIL Open Font License 1.1:</p>
+    <ul>
+      <li><strong>Philosopher</strong> by Jovanny Lemonad.</li>
+      <li><strong>Source Sans 3</strong> by Paul D. Hunt for Adobe.</li>
+      <li><strong>Imperial Script</strong> by Robert Leuschke (TypeSETit).</li>
+    </ul>
+    <h2>Software</h2>
+    <ul>
+      <li><strong>three.js</strong>, Copyright © 2010–2026 three.js authors. MIT licence.</li>
+      <li><strong>Lenis</strong>, Copyright © darkroom.engineering. MIT licence.</li>
+      <li><strong>meshoptimizer</strong> decoder, Copyright © Arseny Kapoulkine. MIT licence.</li>
+      <li><strong>Basis Universal</strong> transcoder, Copyright © Binomial LLC. Apache License 2.0.</li>
+      <li><strong>Astro</strong>, Copyright © Fred K. Schott and the Astro contributors. MIT licence.</li>
+    </ul>
+    <p>The MIT licence, as it applies to each of the above:</p>
+    <pre>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the
+following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre>
+    <p>The Apache License 2.0 is at <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">apache.org/licenses/LICENSE-2.0</a>.</p>
+  </Doc>
+</Base>

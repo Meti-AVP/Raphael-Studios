@@ -1,0 +1,37 @@
+---
+// What the site does with what a visitor gives it (very little, and all of it stays on their device).
+import Base from '../layouts/Base.astro';
+import Doc from '../components/Doc.astro';
+import { company } from '../content/site';
+---
+
+<Base title={`Privacy — ${company.name}`} description={`How the ${company.name} website treats your information: no cookies, no tracking, nothing sent anywhere.`}>
+  <Doc title="Privacy" updated="October 2026">
+    <p>
+      This website belongs to {company.name} {company.descriptor}, {company.contact.address.join(', ')}. It is built to know as little
+      about you as possible.
+    </p>
+    <h2>No cookies, no tracking</h2>
+    <p>The site sets no cookies, runs no analytics or advertising code, and makes no requests to other companies’ servers while you read it.</p>
+    <h2>What you type and upload stays with you</h2>
+    <p>
+      The studios on the page (the T-shirt, the box, the giveaways, the 3D kiosk, the billboard, the photo booth) work entirely in your browser.
+      The brand names, event names and logos you give them are never sent anywhere, and are gone when you close the page.
+    </p>
+    <h2>The camera</h2>
+    <p>
+      The photo booth uses your camera only if you press “Use my camera” and your browser asks you and you allow it. The picture is made on your
+      device and stays there; it is saved only if you press “Take it home”. The camera is turned off when you stop it or scroll away from the booth.
+    </p>
+    <h2>When you contact the studio</h2>
+    <p>
+      The “Ask about this”, “Start a project” and WhatsApp links open WhatsApp (or your e-mail or phone) with a message written for you, which you can
+      read and change before sending. Nothing is sent unless you send it. What you send is then handled by the studio to answer you, and by WhatsApp or
+      your e-mail provider under their own policies.
+    </p>
+    <h2>The host</h2>
+    <p>Like any website, the company that hosts it may keep short technical logs (the address that asked for a page, and when) to keep the site running and safe.</p>
+    <h2>Questions</h2>
+    <p>Write to <a href={`mailto:${company.contact.email}`}>{company.contact.email}</a>.</p>
+  </Doc>
+</Base>

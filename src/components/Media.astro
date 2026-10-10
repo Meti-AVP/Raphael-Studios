@@ -1,0 +1,52 @@
+---
+// One prepared image as a responsive <picture>: AVIF first, WebP for the rest, sized by `sizes`.
+// `layer` picks the cut-out subject or the background plate of the same picture (for the 3D hover).
+import { getImage } from 'astro:assets';
+import { media, file } from '../content/media';
+
+interface Props {
+  id: string;
+  sizes: string;
+  layer?: 'main' | 'subject' | 'plate';
+  widths?: number[];
+  class?: string;
+  priority?: boolean;
+  alt?: string;
+  /** decorative copy (e.g. a duplicate layer): empty alt, hidden from assistive tech */
+  decorative?: boolean;
+  quality?: number;
+}
+
+const { id, sizes, layer = 'main', widths: askedWidths, class: className, priority = false, alt, decorative = false, quality } = Astro.props;
+const m = media(id);
+const name = layer === 'subject' ? m.subject!.file : layer === 'plate' ? m.subject!.plate : m.file;
+const src = file(name);
+const alpha = layer === 'subject' || m.alpha;
+const base = askedWidths ?? [480, 800, 1200, 1600, 2200];
+let widths = base.filter((w) => w <= src.width);
+if (!widths.length || widths[widths.length - 1] < src.width * 0.8) widths = [...widths, src.width].filter((w, i, a) => a.indexOf(w) === i);
+const q = quality ?? (alpha ? 72 : 62);
+const [avif, webp] = await Promise.all([
+  getImage({ src, widths, format: 'avif', quality: q - 8 }),
+  getImage({ src, widths, format: 'webp', quality: q + 6 }),
+]);
+const fallbackW = widths.find((w) => w >= 960) ?? widths[widths.length - 1];
+const fallback = await getImage({ src, width: fallbackW, format: 'webp', quality: q + 6 });
+---
+
+<picture class:list={['media', className]}>
+  <source type="image/avif" srcset={avif.srcSet.attribute} sizes={sizes} />
+  <img
+    src={fallback.src}
+    srcset={webp.srcSet.attribute}
+    sizes={sizes}
+    width={src.width}
+    height={src.height}
+    alt={decorative ? '' : (alt ?? m.alt)}
+    aria-hidden={decorative ? 'true' : undefined}
+    loading={priority ? 'eager' : 'lazy'}
+    decoding={priority ? 'sync' : 'async'}
+    fetchpriority={priority ? 'high' : undefined}
+    draggable="false"
+  />
+</picture>

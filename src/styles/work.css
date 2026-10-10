@@ -1,0 +1,488 @@
+/* The chapters' work, as v3 presents it on the paper: the statement, the exhibits (and the studios' app windows),
+   the gallery, what we do, and the way to start a project. Global: every chapter uses them. */
+
+/* the statement: one large sentence, pictures of the work set inside it */
+.statement {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 0.8rem + 3.6vw, 5.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  max-width: 17em;
+  margin: 0 0 clamp(70px, 10vw, 150px);
+  text-wrap: balance;
+}
+.statement__w {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.35em);
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.9s var(--ease-out);
+  transition-delay: calc(var(--i) * 45ms);
+}
+.statement__pic {
+  display: inline-block;
+  vertical-align: -0.08em;
+  width: 1.55em;
+  height: 0.86em;
+  margin: 0 0.04em;
+  border-radius: 999px;
+  overflow: clip;
+  background: var(--paper-3);
+  box-shadow: inset 0 0 0 1px rgb(40 40 28 / 0.08);
+  transform: scale(0.2) rotate(-10deg);
+  opacity: 0;
+  transition:
+    transform 1s var(--ease-out),
+    opacity 0.5s;
+  transition-delay: calc(var(--i) * 45ms + 120ms);
+}
+/* a picture and the punctuation after it never part at the end of a line */
+.statement__nb {
+  white-space: nowrap;
+}
+.statement__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.statement.is-in .statement__w,
+.statement.is-in .statement__pic {
+  opacity: 1;
+  transform: none;
+}
+html.reduce-motion .statement__w,
+html.reduce-motion .statement__pic {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* an exhibit: the label and the title, a wide stage, the words and the way to ask beneath */
+.exhibit {
+  margin: 0 0 clamp(110px, 14vw, 200px);
+}
+.exhibit__head {
+  display: grid;
+  gap: 16px;
+  margin-bottom: clamp(26px, 3vw, 40px);
+}
+.exhibit__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--turq-deep);
+}
+.exhibit__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--turq);
+  box-shadow: 0 0 0 4px var(--turq-wash);
+}
+.exhibit__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 1rem + 3.2vw, 5.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  max-width: 13em;
+  color: var(--ink);
+}
+/* the stage reaches the paper's edges on a phone; on a computer it keeps to a width the eye takes in at once */
+.exhibit__stage {
+  margin-inline: calc(var(--paper-pad) * -0.6);
+}
+@media (min-width: 760px) {
+  .exhibit__stage {
+    max-width: 1180px;
+    margin-inline: auto;
+  }
+  .exhibit__head,
+  .exhibit__foot {
+    max-width: 1180px;
+    margin-inline: auto;
+  }
+}
+.exhibit__pic {
+  margin: 0;
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  overflow: clip;
+  background: var(--paper-2);
+  box-shadow: 0 50px 90px -60px rgb(40 40 28 / 0.6);
+}
+.exhibit__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.exhibit__depth .depth__frame {
+  border-radius: 22px;
+}
+.exhibit__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  margin-top: clamp(24px, 3vw, 36px);
+}
+@media (min-width: 760px) {
+  .exhibit__foot {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 48px;
+  }
+}
+.exhibit__text {
+  font-size: clamp(1.1rem, 1rem + 0.35vw, 1.3rem);
+  line-height: 1.45;
+  color: var(--ink-2);
+  max-width: 34em;
+}
+.exhibit__cap {
+  margin-top: 12px;
+  font-size: var(--fs-small);
+  color: var(--ink-2);
+}
+.exhibit__cap b {
+  color: var(--ink);
+  margin-right: 6px;
+}
+
+/* the pill with a round arrow (ink and turquoise) */
+.pill--arrow {
+  gap: 12px;
+  padding-right: 6px;
+  height: 48px;
+  font-size: 0.95rem;
+}
+.pill__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--turq-deep);
+  color: var(--light);
+  transition: transform 0.4s var(--ease-out);
+}
+.pill--arrow:hover .pill__icon {
+  transform: rotate(45deg);
+}
+
+/* an interactive studio in its app window: a title bar, the stage, the inspector beside it on a computer */
+.appwin {
+  background: #f7f5ef;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  box-shadow:
+    0 1px 0 rgb(0 0 0 / 0.04),
+    0 60px 100px -60px rgb(40 40 28 / 0.55);
+  overflow: clip;
+}
+.appwin__bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 44px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+.appwin__dots {
+  display: flex;
+  gap: 7px;
+}
+.appwin__dots i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--paper-3);
+}
+.appwin__dots i:first-child {
+  background: var(--turq);
+}
+.appwin__name {
+  flex: 1;
+}
+.appwin__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--turq-wash);
+  color: var(--turq-deep);
+}
+.appwin__live::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--turq);
+  animation: live 1.8s ease-in-out infinite;
+}
+@keyframes live {
+  50% {
+    opacity: 0.25;
+  }
+}
+.appwin__body {
+  padding: 12px;
+}
+.appwin__body .studio__stage,
+.appwin__body .tee__stage {
+  border-radius: 16px;
+}
+/* (one class more than the studios' own styles, so the window's layout wins) */
+@media (min-width: 1100px) {
+  .appwin .appwin__body > .studio,
+  .appwin .appwin__body > .tee {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .appwin .appwin__body .studio__panel,
+  .appwin .appwin__body .tee__panel {
+    grid-template-columns: 1fr;
+    align-content: start;
+    gap: 20px;
+    padding: 18px 16px;
+    border-radius: 16px;
+    background: #fbfaf6;
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .appwin .appwin__body .studio__actions,
+  .appwin .appwin__body .tee__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  /* the stage fits the screen's height: the whole studio is seen at once, the thing in it not too close */
+  .appwin .appwin__body .studio__stage,
+  .appwin .appwin__body .tee__stage {
+    aspect-ratio: auto;
+    height: clamp(460px, 66vh, 680px);
+  }
+}
+
+/* the ribbon: large pictures without end, from one edge of the paper to the other (gallery.ts) */
+.ribbon {
+  margin: 0 calc(var(--paper-pad) * -1) clamp(110px, 13vw, 190px);
+}
+.ribbon__title {
+  padding: 0 var(--paper-pad);
+  margin-bottom: 22px;
+  color: var(--ink-2);
+}
+.ribbon__track {
+  --slide-w: 46vw;
+  --gap: 32px;
+  position: relative;
+  height: calc(var(--slide-w) * 702 / 980 + 64px);
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+  user-select: none;
+  outline: none;
+}
+.ribbon.is-dragging .ribbon__track {
+  cursor: grabbing;
+}
+.ribbon__track:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--turq);
+}
+.ribbon__slide {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--slide-w);
+  margin: 0;
+  will-change: transform;
+}
+/* before the script places them: the first picture in the middle, the others waiting */
+.ribbon:not(.is-ready) .ribbon__slide {
+  transform: translateX(calc(50vw - var(--slide-w) / 2));
+}
+.ribbon:not(.is-ready) .ribbon__slide + .ribbon__slide {
+  visibility: hidden;
+}
+.ribbon__frame {
+  position: relative;
+  aspect-ratio: 980 / 702;
+  border-radius: 15px;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+/* the photograph is wider than its window (16% each side): gallery.ts slides it inside */
+.ribbon__img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 132%;
+  height: 100%;
+  transform: translate3d(-50%, 0, 0);
+  will-change: transform;
+}
+.ribbon__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.ribbon__cap {
+  display: flex;
+  gap: 10px;
+  padding-top: 16px;
+  font-size: var(--fs-small);
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ribbon__cap b {
+  color: var(--ink);
+}
+@media (max-width: 1024px) {
+  .ribbon__track {
+    --slide-w: 66vw;
+    --gap: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .ribbon__track {
+    --slide-w: 84vw;
+    --gap: 16px;
+  }
+}
+
+/* what we do: the services in large type, a picture following the pointer */
+.offer {
+  position: relative;
+}
+.offer__label {
+  color: var(--ink-2);
+  margin-bottom: 18px;
+}
+.offer__list {
+  margin: 0 0 clamp(60px, 8vw, 110px);
+  padding: 0;
+  border-top: 1px solid var(--line-strong);
+}
+.offer__row {
+  display: grid;
+  grid-template-columns: 3.2em minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px 16px;
+  padding: clamp(16px, 2vw, 26px) 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding 0.4s var(--ease-out);
+}
+@media (min-width: 940px) {
+  .offer__row {
+    grid-template-columns: 4em minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+  .offer__row:hover {
+    padding-left: 14px;
+  }
+}
+.offer__num {
+  font-family: var(--font-display);
+  color: var(--turq-deep);
+  font-variant-numeric: tabular-nums;
+}
+.offer__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.7rem, 1rem + 2.4vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.offer__note {
+  grid-column: 2;
+  color: var(--ink-2);
+}
+@media (min-width: 940px) {
+  .offer__note {
+    grid-column: 3;
+  }
+}
+.offer__float {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 240px;
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  overflow: clip;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity 0.35s,
+    scale 0.5s var(--ease-out);
+  z-index: 3;
+  box-shadow: 0 30px 60px -30px rgb(40 40 28 / 0.6);
+}
+.offer__float.is-on {
+  opacity: 1;
+  scale: 1;
+}
+.offer__pic {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.offer__pic.is-on {
+  opacity: 1;
+}
+.offer__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* the way to start a project: one large pill, its arrow turning */
+.project {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: clamp(14px, 1.6vw, 22px) clamp(14px, 1.6vw, 22px) clamp(14px, 1.6vw, 22px) clamp(26px, 3vw, 44px);
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--light);
+  transition: background-color 0.4s var(--ease-out);
+}
+.project:hover {
+  background: var(--turq-deep);
+}
+.project__text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 1rem + 1.8vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.project__icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: clamp(54px, 5vw, 84px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--turq);
+  color: var(--ink);
+  transition: transform 0.5s var(--ease-out);
+}
+.project__icon svg {
+  width: 45%;
+}
+.project:hover .project__icon {
+  transform: rotate(45deg) scale(1.06);
+}

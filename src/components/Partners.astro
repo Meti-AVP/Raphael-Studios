@@ -1,0 +1,234 @@
+---
+// The epilogue, after the thirteen chapters: "we are strategic partners" (p22) over its painted scene, the studio's
+// co-founder in Raphael's own School of Athens (v4: tools/scenes/remake/founder.py); right under it his words, the
+// approach (p5); then the brands that trust the studio (p3), passing in two rows.
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Statement from './Statement.astro';
+import Shelf from './Shelf.astro';
+import { brands, company } from '../content/site';
+import { visibleBrand } from '../content/policy';
+import logoMeta from '../content/logos.generated.json';
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/logos/*.png', { eager: true });
+const meta = logoMeta as Record<string, { width: number; height: number; coverage: number }>;
+// optical sizing: logos with more ink are drawn smaller, so the rows read evenly
+const logos = await Promise.all(
+  brands.filter((b) => visibleBrand(b.name)).map(async (b) => {
+    const src = files[`../assets/logos/${b.logo}.png`]?.default;
+    if (!src) throw new Error(`missing logo ${b.logo}`);
+    const img = await getImage({ src, format: 'webp', width: Math.min(src.width, 280), quality: 82 });
+    const m = meta[b.logo];
+    const aspect = m.width / m.height;
+    const weight = Math.sqrt(Math.max(0.12, m.coverage));
+    const h = Math.max(30, Math.min(64, 48 / weight / Math.pow(aspect, 0.28)));
+    return { ...b, url: img.src, w: Math.round(h * aspect), h: Math.round(h) };
+  }),
+);
+---
+
+<section class="chapter partners" id="partners" data-section-id="partners" data-scene="partners" aria-labelledby="partners-title">
+  <div class="chapter__opener" data-section-opener>
+    <h2 class="chapter__title headline-1" id="partners-title" style="--len:8">
+      <span class="chapter__title-text" data-reveal="title">Partners</span>
+    </h2>
+    <p class="chapter__lead narrative drop-cap" data-reveal="fade">We are strategic partners, dedicated to creating meaningful business impact.</p>
+  </div>
+
+  <div class="paper" data-paper>
+    <div class="paper__inner">
+      <article class="approach" id="approach">
+        <p class="approach__label label" data-reveal="fade"><span class="exhibit__dot" aria-hidden="true"></span>Our approach, in the founder’s words</p>
+        <blockquote class="approach__quote" data-reveal="lines">“{company.approachClosing}”</blockquote>
+        <div class="approach__cols">
+          {company.approach.map((p) => <p class="approach__body" data-reveal="fade">{p}</p>)}
+        </div>
+        <p class="approach__sign" data-reveal="fade">
+          <span class="approach__script">Rafik Roushdy</span>
+          <span class="label">Co-Founder, {company.name}</span>
+        </p>
+      </article>
+      <p class="paper__kicker label"><span class="paper__num">✦</span> The brands that trust us</p>
+      <Statement parts={[`${logos.length} brands, from Cairo to the Gulf, trust us with their names `, { m: 'gem' }, ' since ', `${company.founded}.`]} />
+    </div>
+    <div class="wall" data-reveal="wall" aria-label={`${logos.length} brands that trust Raphael Studios`}>
+      <p class="wall__count" aria-hidden="true"><span class="wall__num">{logos.length}</span><span class="wall__of label">brands · since {company.founded}</span></p>
+      <ul class="wall__grid" role="list">
+        {
+          logos.map((b, i) => (
+            <li class="wall__cell" style={`--i:${i}`}>
+              <span class="wall__logo" role="img" aria-label={b.name} title={b.name} style={`--logo:url(${b.url});--k:${Math.max(0.72, Math.min(1.12, b.h / 52)).toFixed(2)}`} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <Shelf />
+  </div>
+</section>
+
+<style>
+  /* the brands that trust the studio, as a wall of gold on dark velvet: the count large, every logo inlaid in gold
+     (its own shape, a gold gradient), a slow light passing over them all; they come in one after another */
+  .wall {
+    position: relative;
+    margin: 0 var(--paper-pad) clamp(110px, 14vw, 190px);
+    padding: clamp(48px, 6vw, 96px) clamp(20px, 4vw, 72px) clamp(56px, 6vw, 100px);
+    border-radius: 28px;
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgb(201 161 74 / 0.16), transparent 60%),
+      linear-gradient(180deg, #121c1b, #0a1110);
+    box-shadow: inset 0 0 0 1px rgb(201 161 74 / 0.22), 0 60px 120px -60px rgb(0 0 0 / 0.6);
+    overflow: clip;
+    isolation: isolate;
+  }
+  .wall__count {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    margin: 0 0 clamp(36px, 4vw, 64px);
+    text-align: center;
+  }
+  .wall__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(5rem, 2rem + 10vw, 11rem);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    background: linear-gradient(180deg, #fbe7a6 0%, #d9a94a 48%, #9c6d1d 62%, #f0cf7c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .wall__of {
+    color: #d9b866;
+  }
+  .wall__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(clamp(120px, 12vw, 170px), 1fr));
+    gap: clamp(8px, 1vw, 14px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .wall__cell {
+    display: grid;
+    place-items: center;
+    height: clamp(84px, 8vw, 112px);
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.025);
+    box-shadow: inset 0 0 0 1px rgb(201 161 74 / 0.12);
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.8s var(--ease-out) calc(var(--i) * 28ms),
+      transform 0.9s var(--ease-out) calc(var(--i) * 28ms),
+      background-color 0.4s;
+  }
+  .wall.is-in .wall__cell {
+    opacity: 1;
+    transform: none;
+  }
+  .wall__cell:hover {
+    background: rgb(201 161 74 / 0.08);
+  }
+  .wall__logo {
+    display: block;
+    /* every logo inside the same box, its shape kept (the mask's contain); heavy ones a little smaller (--k) */
+    width: 78%;
+    height: 52%;
+    scale: var(--k, 1);
+    /* gold, and a light that passes over the whole wall now and then */
+    background:
+      linear-gradient(110deg, transparent 42%, rgb(255 248 220 / 0.95) 50%, transparent 58%) 0 0 / 400% 100%,
+      linear-gradient(180deg, #f6dd92 0%, #d4a447 46%, #a2741f 60%, #e9c46e 100%);
+    background-attachment: fixed, scroll;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+    animation: wall-shine 9s ease-in-out infinite;
+    transition: transform 0.4s var(--ease-out), filter 0.4s;
+  }
+  .wall__cell:hover .wall__logo {
+    transform: scale(1.06);
+    filter: brightness(1.2);
+  }
+  @keyframes wall-shine {
+    0%,
+    55% {
+      background-position: 100% 0, 0 0;
+    }
+    100% {
+      background-position: -60% 0, 0 0;
+    }
+  }
+  @media (max-width: 760px) {
+    .wall {
+      margin-inline: 0;
+      border-radius: 20px;
+    }
+    .wall__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wall__logo {
+      animation: none;
+    }
+    .wall__cell {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* the approach: his words, large, right under his painted scene */
+  .approach {
+    margin-bottom: clamp(110px, 14vw, 200px);
+  }
+  .approach__cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px clamp(32px, 4vw, 72px);
+    max-width: 1180px;
+  }
+  @media (min-width: 940px) {
+    .approach__cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .approach__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--turq-deep);
+    margin-bottom: 20px;
+  }
+  .approach__quote {
+    margin: 0 0 clamp(36px, 4vw, 60px);
+    max-width: 15em;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 0.9rem + 4.4vw, 6.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .approach__body {
+    color: var(--ink-2);
+    font-size: 1.08rem;
+    line-height: 1.5;
+    max-width: 34em;
+    margin-bottom: 14px;
+  }
+  .approach__sign {
+    display: grid;
+    gap: 4px;
+    margin-top: 26px;
+  }
+  .approach__script {
+    font-family: var(--font-script);
+    font-size: clamp(2.6rem, 2rem + 1.6vw, 3.6rem);
+    line-height: 0.9;
+    color: var(--turq-deep);
+  }
+</style>

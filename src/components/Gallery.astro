@@ -1,0 +1,42 @@
+---
+// A chapter's work as a ribbon of large pictures that never ends: drag it (or flick it, it keeps its speed and slows
+// down by itself), or use the arrow keys. Each picture is a window a little narrower than its photograph: while the
+// ribbon moves, the photograph slides the other way inside its window, so it seems to stand further back.
+import Media from './Media.astro';
+import { media } from '../content/media';
+import { caption } from '../content/captions';
+import { visible } from '../content/policy';
+
+interface Props {
+  ids: string[];
+  title?: string;
+}
+const { ids, title = 'Selected work' } = Astro.props;
+const shown = ids.filter(visible);
+---
+
+{
+  shown.length > 0 && (
+    <section class="ribbon" data-module="gallery" aria-label={title}>
+      <p class="ribbon__hint sr-only">Drag the pictures, or use the left and right arrow keys.</p>
+      <h3 class="ribbon__title label">{title}</h3>
+      <div class="ribbon__track" tabindex="0" role="group" aria-roledescription="carousel" aria-label={title} data-cursor="Drag" data-ribbon-track>
+        {shown.map((id) => {
+          const m = media(id);
+          const c = caption(id);
+          return (
+            <figure class="ribbon__slide" data-ribbon-slide>
+              <div class="ribbon__frame">
+                <Media id={id} class="ribbon__img" sizes="(max-width: 480px) 112vw, (max-width: 1024px) 88vw, 61vw" alt={m.alt} />
+              </div>
+              <figcaption class="ribbon__cap">
+                <b>{c.client}</b>
+                <span>{c.text}</span>
+              </figcaption>
+            </figure>
+          );
+        })}
+      </div>
+    </section>
+  )
+}

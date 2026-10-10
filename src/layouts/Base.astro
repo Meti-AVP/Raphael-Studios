@@ -1,0 +1,90 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/motion.css';
+import '../styles/chapter.css';
+import '../styles/studio.css';
+import '../styles/work.css';
+import { company } from '../content/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${company.name} — ${company.descriptor} · ${company.tagline}`,
+  description = `${company.name} is a full-service creative branding and production agency in ${company.city}, since ${company.founded}: promotional gifts, packaging, corporate uniform, mass production, POS, identity, campaigns, 3D visualization, events and photography.`,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.jpg', Astro.site);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: `${company.name} ${company.descriptor}`,
+  alternateName: company.name,
+  url: Astro.site?.toString(),
+  logo: new URL('/icon-512.png', Astro.site).toString(),
+  foundingDate: String(company.founded),
+  email: company.contact.email,
+  telephone: company.contact.office,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: company.contact.address[0],
+    addressLocality: 'Dokki, Cairo',
+    addressCountry: 'EG',
+  },
+  founder: { '@type': 'Person', name: company.contact.person, jobTitle: company.contact.role },
+};
+---
+
+<!doctype html>
+<html lang="en" dir="ltr" data-wa={company.contact.whatsapp}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#000000" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="preload" href="/fonts/philosopher-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/philosopher-400.woff2" as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <!-- before first paint: tell CSS whether motion and the smooth scroll may run -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('reduce-motion');
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) d.classList.add('fine-pointer');
+        if (!('WebGL2RenderingContext' in window)) d.classList.add('no-stage');
+      })();
+    </script>
+  </head>
+  <body id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot name="fixed" />
+    <main id="main">
+      <slot />
+    </main>
+    <div class="cursor" aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__label"></span></div>
+    <script>
+      import '../scripts/app';
+    </script>
+  </body>
+</html>

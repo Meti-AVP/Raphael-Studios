@@ -1,0 +1,17 @@
+# dependencies, builds and caches (the host builds the site itself)
+node_modules/
+dist/
+.astro/
+.cache/
+.verify/
+.vercel/
+
+# local settings and logs
+.env
+.env.*
+*.log
+
+# operating systems
+.DS_Store
+Thumbs.db
+desktop.ini
