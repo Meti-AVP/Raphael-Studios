@@ -2,4 +2,6 @@
 art/
 .verify/
 .cache/
+.astro/
 dist/
+node_modules/
