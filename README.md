@@ -89,6 +89,19 @@ Tools that are run by hand, when their inputs change:
 
 `verify`, `posters` and `og` need Chrome or Edge installed (or `CHROME_PATH`).
 
+## Where it lives
+
+| | |
+| --- | --- |
+| Code | <https://github.com/Meti-AVP/Raphael-Studios> (branch `main`) |
+| Site | <https://raphael-studios.vercel.app> (Vercel project `raphael-studios`) |
+
+Every push to `main` is built and published by Vercel on its own (`npm run build`, `dist/`; `vercel.json` sets the
+long cache of `/assets/`). The site's own address (its canonical links, the share picture) comes from Vercel's
+production address, so it follows a domain once one is attached in Vercel; `SITE_URL` overrides it. The scenes'
+sources (`art/`) are in the repository but not uploaded to the host (`.vercelignore`): the built scenes are in
+`public/scenes/`.
+
 ## Results (10 October 2026, v4)
 
 | | Phone | Computer |
